@@ -28,14 +28,14 @@ public class Data {
 	private String Area_Fact;
 	private String Date_Fact;
 	private String Name_award_Fact;
-	private String Date_expire_Face;
+	private String Date_expire_Fact;
 	@Override
 	public String toString() {
 		return "Data [Id=" + Id + ", Province=" + Province + ", Area=" + Area + ", Date=" + Date + ", Award=" + Award
 				+ ", Number_result=" + Number_result + ", Value=" + Value + ", isDelete=" + isDelete + ", Date_expire="
 				+ Date_expire + ", Province_Fact=" + Province_Fact + ", Area_Fact=" + Area_Fact + ", Date_Fact="
 				+ Date_Fact + ", Name_award_Fact=" + Name_award_Fact + ", Number_result_Fact=" 
-				+ ", Date_expire_Face=" + Date_expire_Face + "]";
+				+ ", Date_expire_Face=" + Date_expire_Fact + "]";
 	}
 
 
@@ -170,12 +170,12 @@ public class Data {
 
 
 	public String getDate_expire_Face() {
-		return Date_expire_Face;
+		return Date_expire_Fact;
 	}
 
 
-	public void setDate_expire_Face(String date_expire_Face) {
-		Date_expire_Face = date_expire_Face;
+	public void setDate_expire_Face(String date_expire_Fact) {
+		Date_expire_Fact = date_expire_Fact;
 	}
 
 	public Data() {
@@ -184,7 +184,7 @@ public class Data {
 	public Data(String id, int province, int area, int date, int award, int number_result, int value, int isDelete,
 			int date_expire, String province_Fact, String area_Fact, String date_Fact, String name_award_Fact,
 			
-			String date_expire_Face) {
+			String date_expire_Fact) {
 		Id = id;
 		Province = province;
 		Area = area;
@@ -198,7 +198,7 @@ public class Data {
 		Area_Fact = area_Fact;
 		Date_Fact = date_Fact;
 		Name_award_Fact = name_award_Fact;
-		Date_expire_Face = date_expire_Face;
+		Date_expire_Fact = date_expire_Fact;
 	}
 	int [] mark= {2,3,4,4,5,5,5,5,6};
 	public String getNumberResultReal() {

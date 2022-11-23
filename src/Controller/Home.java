@@ -41,7 +41,7 @@ public class Home extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		 response.setContentType("text/plain;charset=UTF-8;pageEncoding=UTF-8");
+		response.setContentType("text/plain;charset=UTF-8;pageEncoding=UTF-8");
 		// TODO Auto-generated method stub
 		Data data=Data.get("08ede14e-b1cc-42f0-8bf9-61dbc31ccf3d");
 		data.setArea(1);
