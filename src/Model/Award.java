@@ -1,13 +1,13 @@
 package Model;
 
 import java.lang.reflect.Type;
+
 import java.sql.Date;
 import java.util.Collection;
 import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
 import Service.Api;
 
 public class Award {

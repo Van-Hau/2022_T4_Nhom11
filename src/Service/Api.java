@@ -1,6 +1,7 @@
 package Service;
 
 import java.io.BufferedInputStream;
+
 import java.io.BufferedReader;
 
 import java.io.DataOutputStream;
@@ -29,10 +30,10 @@ import org.apache.http.util.EntityUtils;
 
 import com.google.gson.Gson;
 
-import Model.Area;
-import Model.Award;
 import Model.DataTemp;
 import Model.DateDim;
+import Model.Area;
+import Model.Award;
 import Model.Province;
 
 public class Api {
