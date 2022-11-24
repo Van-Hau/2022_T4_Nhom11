@@ -43,15 +43,17 @@ public class Home extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/plain;charset=UTF-8;pageEncoding=UTF-8");
 		// TODO Auto-generated method stub
-		Data data=Data.get("08ede14e-b1cc-42f0-8bf9-61dbc31ccf3d");
-		data.setArea(1);
-		boolean update=Data.update(Data.getData(data));
-		data.setId("test1");
-		boolean insert=Data.insert(Data.getData(data));
-		boolean delete=Data.delete(data.getId());
-		response.getWriter().println("OK CHUA - \n "+"\n"+data.toString()+"-------------\nupdate: "+update
-				+"-------------\ninsert: "+insert
-				+"-------------\ndelete: "+delete
+		List<Data> data=Data.getByDate("2022-06-12", "MB");
+		String dataString="";
+		for(Data d:data) {
+			dataString+=d.toString()+"\n";
+		}
+//		data.setArea(1);
+//		boolean update=Data.update(Data.getData(data));
+//		data.setId("test1");
+//		boolean insert=Data.insert(Data.getData(data));
+//		boolean delete=Data.delete(data.getId());
+		response.getWriter().println("OK CHUA - \n "+"\n"+dataString
 				);
 		//request.getRequestDispatcher("/index.jsp").forward(request, response);
 	}

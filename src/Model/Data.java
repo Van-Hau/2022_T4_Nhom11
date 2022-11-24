@@ -200,7 +200,7 @@ public class Data {
 		Name_award_Fact = name_award_Fact;
 		Date_expire_Fact = date_expire_Fact;
 	}
-	int [] mark= {2,3,4,4,5,5,5,5,6};
+	int [] mark= {2,3,4,4,5,5,5,5,6,6};
 	public String getNumberResultReal() {
 		String numberResultReal=this.Number_result+"";
 		int repeat=mark[this.Award]-(numberResultReal).length();
@@ -213,6 +213,12 @@ public class Data {
 	}
 	public static List<Data> getAll() {
 		String json=Api.call("https://apinhom11-production.up.railway.app/data/gets","GET");
+		List<Data> datas=Data.parseList(json);
+		return datas;
+	}
+	public static List<Data> getByDate(String date,String area) {
+		// date ở dạng yyyy-MM-dd và area là MB,MN,MT
+		String json=Api.call("https://apinhom11-production.up.railway.app/data/getByDate/"+date+"/"+area,"GET");
 		List<Data> datas=Data.parseList(json);
 		return datas;
 	}
