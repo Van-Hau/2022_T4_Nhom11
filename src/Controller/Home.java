@@ -3,8 +3,12 @@ package Controller;
 import java.io.IOException;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -44,11 +48,31 @@ public class Home extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/plain;charset=UTF-8;pageEncoding=UTF-8");
 		// TODO Auto-generated method stub
-		List<Data> data=Data.getByDate("2022-06-12", "MB");
+		List<Data> data=Data.getByDate("2022-01-24", "MN");
 		String dataString="";
+		Map<String,List<Data>> map=new HashMap<String, List<Data>>();
 		for(Data d:data) {
-			dataString+=d.toString()+"\n";
+			String province=d.getProvince_Fact();
+			if(map.containsKey(province)) {
+				map.get(province).add(d);
+			}
+			else {
+				List<Data> elements=new ArrayList<Data>();
+				elements.add(d);
+				map.put(province, elements);
+			}
 		}
+		for(Entry<String, List<Data>> entry:map.entrySet()) {
+			dataString+=entry.getKey()+"\n";
+			for(Data e:entry.getValue()) {
+				dataString+=e.getNumberResultReal()+"\n";
+			}
+			dataString+="--------------\n";
+		}
+		
+//		for(Data d:data) {
+//			dataString+=d.getNumberResultReal()+"\n";
+//		}
 //		data.setArea(1);
 //		boolean update=Data.update(Data.getData(data));
 //		data.setId("test1");

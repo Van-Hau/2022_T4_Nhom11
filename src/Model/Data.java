@@ -29,13 +29,14 @@ public class Data {
 	private String Date_Fact;
 	private String Name_award_Fact;
 	private String Date_expire_Fact;
+
 	@Override
 	public String toString() {
 		return "Data [Id=" + Id + ", Province=" + Province + ", Area=" + Area + ", Date=" + Date + ", Award=" + Award
 				+ ", Number_result=" + Number_result + ", Value=" + Value + ", isDelete=" + isDelete + ", Date_expire="
 				+ Date_expire + ", Province_Fact=" + Province_Fact + ", Area_Fact=" + Area_Fact + ", Date_Fact="
-				+ Date_Fact + ", Name_award_Fact=" + Name_award_Fact + ", Number_result_Fact=" 
-				+ ", Date_expire_Face=" + Date_expire_Fact + "]";
+				+ Date_Fact + ", Name_award_Fact=" + Name_award_Fact + ", Date_expire_Fact=" + Date_expire_Fact
+				+ ", mark=" + mark + "]";
 	}
 
 
@@ -201,11 +202,16 @@ public class Data {
 		Date_expire_Fact = date_expire_Fact;
 	}
 	int [] mark= {2,3,4,4,5,5,5,5,6,6};
+	int [] markMB= {2,3,4,4,5,5,5,5,5};
 	public String getNumberResultReal() {
 		String numberResultReal=this.Number_result+"";
+		//System.out.println(numberResultReal);
 		int repeat=mark[this.Award]-(numberResultReal).length();
-		if(this.Area_Fact.equals("MB")) repeat=repeat-1;
-		numberResultReal=String.join("", Collections.nCopies(repeat, "0"))+numberResultReal;
+		//System.out.println(repeat);
+		if(this.Area_Fact.equals("MB")) repeat=markMB[this.Award-1]-(numberResultReal).length();;
+		if(repeat>0) {
+			numberResultReal=String.join("", Collections.nCopies(repeat, "0"))+numberResultReal;
+		}
 		return numberResultReal;
 	}
 	public static DataTemp getData(Data temp) {
@@ -255,5 +261,17 @@ public class Data {
 		Type collectionType = new TypeToken<Mess>(){}.getType();
 		Mess mess=gson.fromJson(json,collectionType);
 		return mess.isMess();	
+	}
+	public static void main(String[] args) {
+		Data data=new Data();
+		//data.setNumber_result(09);
+		System.out.println(Integer.parseInt("00415")==415);
+		System.out.println((Integer)00415);
+		//System.out.println(00415);
+		data.setArea(3);
+		data.setAward(2);
+		data.setArea_Fact("MB");
+		String str=data.getNumberResultReal();
+		System.out.println(str);
 	}
 }

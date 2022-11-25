@@ -65,9 +65,7 @@ public class StagingDB {
 			ps = con.prepareStatement(Configuration.LOAD_FILE_TO_STAGING);
 			ps.setString(1, Configuration.PATH + csvFile);
 			System.out.println(Configuration.PATH + csvFile);
-			
 			int affect=ps.executeUpdate();
-			System.out.println(affect);
 			ps.close();
 			if(affect>=0) return true;
 		} catch (SQLException e) {

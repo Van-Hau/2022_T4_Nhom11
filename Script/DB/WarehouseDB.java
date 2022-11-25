@@ -1,6 +1,7 @@
 package DB;
 
 import java.beans.PropertyVetoException;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -102,9 +103,8 @@ public class WarehouseDB {
 		int id = 0;
 		try {
 			PreparedStatement ps = con.prepareStatement(Configuration.GET_DATE);
-			ps.setDate(1, date);
+			ps.setString(1, date.toString());
 			ResultSet rs = ps.executeQuery();
-
 			if (rs.next())
 				id = rs.getInt(1);
 
@@ -175,7 +175,6 @@ public class WarehouseDB {
 	public boolean saveToDatabase(int idDate,List<KQXS> listKQXS){
 		long start = System.currentTimeMillis();
 		int affect=0;
-		System.out.println("staging length "+listKQXS.size());
 		for(KQXS kqxs:listKQXS) {
 			//long start1 = System.currentTimeMillis();
 			int province = getIdProvince(kqxs.getProvince());
