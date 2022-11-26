@@ -3,7 +3,6 @@ package Script;
 // hình chữ nhật đại diện cho công việc và ký hiệu hình thoi đại diện cho cấu trúc rẽ nhánh
 // dựa trên file log để thực hiện lấy dữ liệu vào file csv,trạng thái er(hợp lệ) hoặc es(thiếuhỏng) thì kết thúc
 import java.io.File;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -37,17 +36,11 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
-import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
-import com.opencsv.exceptions.CsvException;
-
 import Config.Configuration;
 import DB.ControllDB;
 import DB.StagingDB;
 import DB.WarehouseDB;
-import ModelScript.Area;
-
 public class ScrappingKQXS {
 	//31/3/2012
 	 FTPClient ftpClient;
@@ -344,7 +337,7 @@ public void getMultiDay() {
 		System.out.println("Không tồn tại file Config");
 		return;
 	}
-	List<String> dates=getListDate("2022-01-01", "2022-11-24");
+	List<String> dates=getListDate("2022-10-16", "2022-11-24");
 	if(dates.size()==0) {
 		System.out.println("Start date have to more than End date !");
 		return ;
@@ -381,7 +374,7 @@ public void setSchedule() {
         timer.schedule(timerTask, dateSchedule, period);
 	}
 //29
-	public static void main(String[] args) throws IOException, ClassNotFoundException, SQLException, CsvException, ParseException {
+	public static void main(String[] args) throws IOException, ClassNotFoundException, SQLException, ParseException {
 		ScrappingKQXS sm = new ScrappingKQXS();
 		sm.getMultiDay();
 		//sm.updateAwardDimension();
