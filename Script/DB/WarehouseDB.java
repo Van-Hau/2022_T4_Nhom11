@@ -150,6 +150,7 @@ public class WarehouseDB {
 	}
 	
 	public int getIdProvince(String tinh) {
+		
 		//System.out.println("tinh la "+tinh);
 		try {
 			PreparedStatement ps = con.prepareStatement(Configuration.GET_PROVINCE);
@@ -177,6 +178,7 @@ public class WarehouseDB {
 		int affect=0;
 		for(KQXS kqxs:listKQXS) {
 			//long start1 = System.currentTimeMillis();
+			//System.out.println(kqxs.getProvince());
 			int province = getIdProvince(kqxs.getProvince());
 			int area = getIdArea(kqxs.getArea());
 			int award = getIdAward(kqxs.getAward());
@@ -205,6 +207,7 @@ public class WarehouseDB {
 			if(saveToDatabaseHelper(UUID.randomUUID().toString(),province, area, idDate, award, numberResult, value,idDateExpire)) {
 				affect++;
 			}
+			else return false;
 			//long end1 = System.currentTimeMillis();
 			//System.out.println("Handle That took "+(end1-start1)+"s");
 

@@ -5,10 +5,13 @@ package Script;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -62,11 +65,13 @@ public class ScrappingKQXS {
 		
 	}
 	public void writeCSV(List<String[]> listKQXS,String date, String path,String area,String idLog) {
-		try {		
+		try {
+			if(listKQXS.size()>0)System.out.println("Collec success data !");
+			System.out.println("Upload file in FTP.....");
 			String filePath=path+area+"_" +date+".csv";
 			File file = new File(filePath);
 			if(!file.getParentFile().exists()) file.getParentFile().mkdirs();
-			CSVWriter csv=new CSVWriter(new FileWriter(file));
+			CSVWriter csv=new CSVWriter(new PrintWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")));
 			csv.writeNext(field);
 			csv.writeAll(listKQXS);
 			csv.flush();
@@ -75,25 +80,25 @@ public class ScrappingKQXS {
             	 boolean done = ftpClient.storeFile(Configuration.VITUAL_PATH+"/"+file.getName(), inputStream);
                  inputStream.close();
                  if (done) {
-                     System.out.println("Upload "+area+" thành công");
+                     System.out.println("Upload "+area+" success");
                  }
                  else {
                 	controllDB.changSaveStatus(idLog,0); 
-                 	System.out.println("Upload thất bại");
+                 	System.out.println("Upload fail !");
                  }	
 					
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			controllDB.changSaveStatus(idLog,0); 
 			e.printStackTrace();
-			System.out.println("Không tìm thấy file");
+			System.out.println("Not find file");
 		} 	
 
 	}
 
 	public void scrappingMienBac(String url,String date) throws IOException {
 		if(controllDB.checkLog("MB"+"_"+date+".csv")!=-1) {
-			System.out.println("File lỗi hoặc đã lưu vào CSDL");
+			System.out.println("Error file or already save to DB");
 			return;
 		}
 		
@@ -154,8 +159,9 @@ public class ScrappingKQXS {
 		//insert dữ liệu từ datawarehouse vào staging
 		//stagingDB.importArea();
 		//Lặp lại các phần tử, so sánh nếu giống thì cập nhật lại date update
+		//System.out.println(count);
 		if(stagingDB.getProvince(province)==null) {
-			System.out.println("Chua co");
+			System.out.println(province +"chua co");
 			if(stagingDB.insertProvince(province,count)) {
 				return warehouseDB.importProvince(count);
 			}
@@ -174,7 +180,7 @@ public class ScrappingKQXS {
 		//stagingDB.importArea();
 		//Lặp lại các phần tử, so sánh nếu giống thì cập nhật lại date update
 		if(stagingDB.getAward(award)==null) {
-			System.out.println("Chua co");
+			System.out.println(award+" Chua co");
 			if(stagingDB.insertAward(award,count)) {
 				return warehouseDB.importAward(count);
 			}
@@ -193,11 +199,9 @@ public class ScrappingKQXS {
 	}
 	public void scrapping(String url,String date,String area){
 		if(controllDB.checkLog(area+"_"+date+".csv")!=-1) {
-			System.out.println("File lỗi hoặc đã lưu vào CSDL");
+			System.out.println("Error file or already save to DB");
 			return;
 		}
-		
-		
 		Document doc = null;
 		try {
 				LocalDateTime now = LocalDateTime.now();
@@ -212,6 +216,7 @@ public class ScrappingKQXS {
 				}
 				int countAward =stagingDB.importAward();
 				int countProvince =stagingDB.importProvince()+1;
+				
 				// thong tin chung
 				String idLog=controllDB.saveLog(time,area+"_"+date+".csv",1);
 //				String dateOfWeek = doc.select("#noidung .box_kqxs:eq(1) .content table tbody tr td .leftcl .thu a").html();
@@ -223,10 +228,9 @@ public class ScrappingKQXS {
 				Elements listValueAward=doc.select("#noidung .box_kqxs:eq(1) .content>table>tbody>tr>td:eq(1)>table>tbody>tr>td:eq("+pivot+")");
 				for (Element e : list) {	
 					String province = e.select("table tbody tr:eq(0)>.tinh a").html();
-					updateProvinceDimension(province,countProvince);
+					if(updateProvinceDimension(province,countProvince)) countProvince++;
 					for (int i = 2; i <= 10; i++) {
 						String award = doc.select("#noidung .box_kqxs:eq(1) .content>table>tbody>tr>td:eq(0)>table>tbody>tr:eq("+i+")").get(0).text();
-						
 						if(updateAwardDimension(award,countAward)) countAward ++;
 						String value=listValueAward.select("tr:eq("+i+")>td").html();					
 						Elements resultTable = e.select("table tbody tr:" + "eq(" + i + ")>td>div");
@@ -337,7 +341,7 @@ public void getMultiDay() {
 		System.out.println("Không tồn tại file Config");
 		return;
 	}
-	List<String> dates=getListDate("2022-10-16", "2022-11-24");
+	List<String> dates=getListDate("2022-11-01", "2022-11-27");
 	if(dates.size()==0) {
 		System.out.println("Start date have to more than End date !");
 		return ;
@@ -349,6 +353,13 @@ public void getMultiDay() {
 	disconnectFTPServer();
 	long end=System.currentTimeMillis();
 	System.out.println("That took "+(end-start)/1000+"s");
+}
+public void getDateNow() {
+	LocalDate now=LocalDate.now();
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+	String formattedString = now.format(formatter);
+	System.out.println("Collec data for date "+formattedString);
+	getData(formattedString);
 }
 public void setSchedule() {
 		Calendar calendar = Calendar.getInstance();
@@ -376,7 +387,10 @@ public void setSchedule() {
 //29
 	public static void main(String[] args) throws IOException, ClassNotFoundException, SQLException, ParseException {
 		ScrappingKQXS sm = new ScrappingKQXS();
-		sm.getMultiDay();
+		sm.getDateNow();
+		//sm.getMultiDay();
+		
+		//System.out.println(formattedString);
 		//sm.updateAwardDimension();
 		//sm.createDateTable();
 		

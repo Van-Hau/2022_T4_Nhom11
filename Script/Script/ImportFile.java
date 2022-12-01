@@ -54,7 +54,7 @@ public class ImportFile {
 	public void downloadFTPFile(String ftpFilePath, String downloadFilePath) {
 		File downloadFile = new File(downloadFilePath);
 		if(downloadFile.exists()) {
-			System.out.println("File đã tồn tại ");
+			System.out.println("File is exits .");
 			return;
 		}
 		connectFTPServer();
@@ -131,7 +131,7 @@ public class ImportFile {
 			if (ftpClient.isConnected()) {
 				ftpClient.logout();
 				ftpClient.disconnect();
-				 System.out.println("Đã đăng xuất FTP");
+				 System.out.println("Disconnect FTP");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -146,18 +146,18 @@ public class ImportFile {
 			String date = fileName.split("_")[2];
 			String idLog= fileName.split("_")[0];
 			String fileNameReal= fileName.replace(idLog+"_","");
-			System.out.println("Ngày " + date);
-			System.out.println("FILE NAME: "+fileName);
+			System.out.println("Data of file " + fileNameReal);
 			downloadFTPFile(Configuration.VITUAL_PATH + "/" + fileNameReal, Configuration.PATH + fileNameReal);
 			java.sql.Date sql=Configuration.convertDate(date);
 			int idDate = warehouseDB.getIdDate(sql);
-
+			System.out.println("Loading"
+					+ " to staging ....");
 				if(saveToStagingHelper(fileNameReal, idDate,idLog)) {
-					System.out.println("Quá trình load từ staging vào database thành công");
+					System.out.println("Load to staging success !");
 					//return true;
 				}
 				else {
-					System.out.println("Load vào staging thất bại");
+					System.out.println("Load to staging fail !");
 					//return false;
 					
 				}
@@ -167,11 +167,9 @@ public class ImportFile {
 	}
 	public boolean saveToStagingHelper(String fileName,int idDate,String idLog) {
 		try {
-			
 			if(stagingDB.saveToStagingHelper(fileName, idDate)) {
-				
-				return saveToDatabase(idDate, stagingDB.getAllFromStaging(), idLog);
-				
+				System.out.println("Load file to staging success !");
+				return saveToDatabase(idDate, stagingDB.getAllFromStaging(), idLog);			
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -182,20 +180,23 @@ public class ImportFile {
 	}
 	public boolean saveToDatabase(int idDate,List<KQXS> kqxs,String idLog) {
 		try {
+			System.out.println("Loading to datawarehouse ....");
 			stagingDB.truncateStaging();
 			if(warehouseDB.saveToDatabase(idDate,kqxs)){
+				System.out.println("Load thành công vào datawarehouse...");
+				System.out.println("Changing status log...");
 				if(!controllDB.changSaveStatus(idLog,2)) {
-					System.out.println("Thay đổi trạng thái thất bại");
+					System.out.println("Change status fail !");
 					return false;
 				}
 				else {
-					System.out.println("Thay đổi trạng thái thành công");
-					
+					System.out.println("Change status success !");
 					return true;
 				}
+				
 			}
 			else {
-				System.out.println("Lưu vào databwarehouse thất bại");
+				System.out.println("Save to datawarehouse fail !");
 				return false;
 			}
 			

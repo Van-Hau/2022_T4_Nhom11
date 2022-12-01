@@ -67,10 +67,10 @@ public class StagingDB {
 			System.out.println(Configuration.PATH + csvFile);
 			int affect=ps.executeUpdate();
 			ps.close();
-			if(affect>=0) return true;
+			if(affect>0) return true;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			return false;
+			e.printStackTrace();
 		}
 		return false;
 	}
@@ -80,6 +80,7 @@ public class StagingDB {
 		PreparedStatement psStaging = con.prepareStatement(Configuration.GETS_KQXS);
 		ResultSet rs = psStaging.executeQuery();
 		while (rs.next()) {
+			//System.out.println(rs.getString(2));
 			String province=rs.getString(2);
 			String area=rs.getString(3);
 			String date=rs.getString(4);
