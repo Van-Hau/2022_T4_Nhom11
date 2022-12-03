@@ -12,6 +12,9 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import org.apache.commons.io.IOUtils;
 import com.google.gson.Gson;
 import Model.DataTemp;
@@ -37,6 +40,28 @@ public class Api {
 			e.printStackTrace();
 		}
 	    return json.toString();
+	}
+	public static String convertDateFromSql(String dateParamater) {
+		SimpleDateFormat fromUser = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat myFormat = new SimpleDateFormat("dd-MM-yyyy");
+		try {
+			dateParamater= myFormat.format(fromUser.parse(dateParamater));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return dateParamater;
+	}
+	public static String convertDateToSql(String dateParamater) {
+		SimpleDateFormat fromUser = new SimpleDateFormat("dd-MM-yyyy");
+		SimpleDateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			dateParamater= myFormat.format(fromUser.parse(dateParamater));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return dateParamater;
 	}
 	public static String call(String url,String method) {
 		StringBuilder json=new StringBuilder();

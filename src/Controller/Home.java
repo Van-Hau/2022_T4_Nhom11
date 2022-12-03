@@ -63,8 +63,6 @@ public class Home extends HttpServlet {
 		
 		//nGAY DE TESS
 		String dayTest = "2022-11-20";
-	
-			
 		//KQXS MN-------------------------------------------------
 		List<Data> dataMN=Data.getByDate(dayTest, "MN");
 		Map<String,List<Data>> mapMN=Data.KQTheoTinh(dayTest, "MN");
@@ -172,14 +170,7 @@ public class Home extends HttpServlet {
 		request.setAttribute("kqGiai2MB", kqGiai2MB);
 		request.setAttribute("kqGiai1MB", kqGiai1MB);
 		request.setAttribute("kqGiaiDBMB", kqGiaiDBMB);
-		
-		
 
-
-		
-		
-
-		
 //		for(Data d:data) {
 //			dataString+=d.getNumberResultReal()+"\n";
 //		}

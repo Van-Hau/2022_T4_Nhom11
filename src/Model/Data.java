@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -32,6 +33,7 @@ public class Data {
 	private String Province_Fact;
 	private String Area_Fact;
 	private String Date_Fact;
+	private String date_of_week;
 	private String Name_award_Fact;
 	private String Date_expire_Fact;
 	
@@ -75,15 +77,6 @@ public class Data {
 
 
 
-
-	@Override
-	public String toString() {
-		return "Data [Id=" + Id + ", Province=" + Province + ", Area=" + Area + ", Date=" + Date + ", Award=" + Award
-				+ ", Number_result=" + Number_result + ", Value=" + Value + ", isDelete=" + isDelete + ", Date_expire="
-				+ Date_expire + ", Province_Fact=" + Province_Fact + ", Area_Fact=" + Area_Fact + ", Date_Fact="
-				+ Date_Fact + ", Name_award_Fact=" + Name_award_Fact + ", Date_expire_Fact=" + Date_expire_Fact
-				+ ", mark=" + mark + "]";
-	}
 
 
 	public String getId() {
@@ -228,10 +221,39 @@ public class Data {
 	public Data() {
 		
 	}
+	
+	@Override
+	public String toString() {
+		return "Data [Id=" + Id + ", Province=" + Province + ", Area=" + Area + ", Date=" + Date + ", Award=" + Award
+				+ ", Number_result=" + Number_result + ", Value=" + Value + ", isDelete=" + isDelete + ", Date_expire="
+				+ Date_expire + ", Province_Fact=" + Province_Fact + ", Area_Fact=" + Area_Fact + ", Date_Fact="
+				+ Date_Fact + ", date_of_week=" + date_of_week + ", Name_award_Fact=" + Name_award_Fact
+				+ ", Date_expire_Fact=" + Date_expire_Fact + "]";
+	}
+
+	public String getDate_of_week() {
+		return date_of_week;
+	}
+
+
+	public void setDate_of_week(String date_of_week) {
+		this.date_of_week = date_of_week;
+	}
+
+
+	public String getDate_expire_Fact() {
+		return Date_expire_Fact;
+	}
+
+
+	public void setDate_expire_Fact(String date_expire_Fact) {
+		Date_expire_Fact = date_expire_Fact;
+	}
+
+
 	public Data(String id, int province, int area, int date, int award, int number_result, int value, int isDelete,
-			int date_expire, String province_Fact, String area_Fact, String date_Fact, String name_award_Fact,
-			
-			String date_expire_Fact) {
+			int date_expire, String province_Fact, String area_Fact, String date_Fact, String date_of_week,
+			String name_award_Fact, String date_expire_Fact) {
 		Id = id;
 		Province = province;
 		Area = area;
@@ -244,9 +266,11 @@ public class Data {
 		Province_Fact = province_Fact;
 		Area_Fact = area_Fact;
 		Date_Fact = date_Fact;
+		this.date_of_week = date_of_week;
 		Name_award_Fact = name_award_Fact;
 		Date_expire_Fact = date_expire_Fact;
 	}
+
 	int [] mark= {2,3,4,4,5,5,5,5,6,6};
 	int [] markMB= {2,3,4,4,5,5,5,5,5};
 	public String getNumberResultReal() {
@@ -295,6 +319,21 @@ public class Data {
 		List<Data> datas=gson.fromJson(json,collectionType);
 		Data data=datas.size()>0?datas.get(0):new Data();
 		return data;
+	}
+	public static Map<String, List<Data>> filterAward(List<Data> input){
+		Map<String,List<Data>> result=new LinkedHashMap<String,List<Data>>();
+		for(Data d:input) {
+			String award=d.getName_award_Fact();
+			if(result.containsKey(award)) {
+				result.get(award).add(d);
+			}
+			else {
+				List<Data> elements=new ArrayList<Data>();
+				elements.add(d);
+				result.put(award, elements);
+			}
+		}
+		return result;
 	}
 	public static List<Data> parseList(String json) {
 		Gson gson=new Gson();
@@ -433,6 +472,7 @@ public static List<String> DSTinh(String date,String area){
 	public static Map<String, List<Data>> KQTheoTinh(String date,String area){
 		List<Data> data=Data.getByDate(date, area);
 		Map<String,List<Data>> map=new HashMap<String, List<Data>>();
+		if(data!=null) {
 		for(Data d:data) {
 			String province=d.getProvince_Fact();
 			if(map.containsKey(province)) {
@@ -443,7 +483,7 @@ public static List<String> DSTinh(String date,String area){
 				elements.add(d);
 				map.put(province, elements);
 			}
-		}
+		}}
 		return map;
 	}
 	
