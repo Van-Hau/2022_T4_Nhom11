@@ -1,7 +1,8 @@
 package Model;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
-
+import java.net.URLEncoder;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -298,6 +299,41 @@ public class Data {
 		List<Data> datas=Data.parseList(json);
 		return datas;
 	}
+	public static List<Data> getByProvince(String date,String province) {
+		// date ở dạng yyyy-MM-dd và area là MB,MN,MT
+		String json="";
+		try {
+			json = Api.call("https://apinhom11-production.up.railway.app/data/getByProvince/"+date+"/"+URLEncoder.encode(province, "UTF-8").replace("+", "%20"),"GET");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		List<Data> datas=Data.parseList(json);
+		return datas;
+	}
+	public static List<Model.Date> getByProvinceTop3(String province) {
+		// date ở dạng yyyy-MM-dd và area là MB,MN,MT
+		String json="";
+		try {
+			json = Api.call("https://apinhom11-production.up.railway.app/data/getByProvinceTop3/"+URLEncoder.encode(province, "UTF-8").replace("+", "%20"),"GET");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		List<Model.Date> datas=Data.parseDate(json);
+		return datas;
+	}	public static List<Model.Date> getByProvinceTop3Limit(String date,String province) {
+		// date ở dạng yyyy-MM-dd và area là MB,MN,MT
+		String json="";
+		try {
+			json = Api.call("https://apinhom11-production.up.railway.app/data/getByProvinceTop3Limit/"+date+"/"+URLEncoder.encode(province, "UTF-8").replace("+", "%20"),"GET");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		List<Model.Date> datas=Data.parseDate(json);
+		return datas;
+	}
 	public static Data get(String id) {
 		String json=Api.call("https://apinhom11-production.up.railway.app/data/get/"+id,"GET");
 		System.out.println(json);
@@ -339,6 +375,12 @@ public class Data {
 		Gson gson=new Gson();
 		Type collectionType = new TypeToken<Collection<Data>>(){}.getType();
 		List<Data> data=gson.fromJson(json,collectionType);
+		return data;
+	}
+	public static List<Model.Date> parseDate(String json) {
+		Gson gson=new Gson();
+		Type collectionType = new TypeToken<Collection<Model.Date>>(){}.getType();
+		List<Model.Date> data=gson.fromJson(json,collectionType);
 		return data;
 	}
 	public static boolean checkAffect(String json) {
@@ -486,6 +528,7 @@ public static List<String> DSTinh(String date,String area){
 		}}
 		return map;
 	}
+	
 	
 	public static List<String> listTinh(){
 		return DStinh;

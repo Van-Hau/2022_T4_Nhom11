@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import Model.Data;
+import Model.Province;
+import Service.Api;
 
 /**
  * Servlet implementation class MultiDate
@@ -33,7 +35,11 @@ public class MultiDate extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String date =request.getParameter("date");
+		String date ="";
+		if(request.getParameter("date")!=null){
+			date=Api.convertDateToSql(request.getParameter("date"));
+		}
+		else date=LocalDate.now()+"";
 		LocalDate dateOne = LocalDate.parse(date);
 		LocalDate dateTwo = dateOne.minusDays(7);
 		LocalDate dateThree = dateTwo.minusDays(7);
@@ -41,6 +47,8 @@ public class MultiDate extends HttpServlet {
 		Map<String,List<Data>> map1=Data.KQTheoTinh(dateOne+"", area);
 		Map<String,List<Data>> map2=Data.KQTheoTinh(dateTwo+"", area);
 		Map<String,List<Data>> map3=Data.KQTheoTinh(dateThree+"", area);
+		List<Province> listProvince=Province.getAll();
+		request.setAttribute("listProvince",listProvince);
 		request.setAttribute("list1",map1);
 		request.setAttribute("list2",map2);
 		request.setAttribute("list3",map3);

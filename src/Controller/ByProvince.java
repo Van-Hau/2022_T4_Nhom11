@@ -16,16 +16,16 @@ import Model.Province;
 import Service.Api;
 
 /**
- * Servlet implementation class ByArea
+ * Servlet implementation class ByProvince
  */
-@WebServlet("/ByArea")
-public class ByArea extends HttpServlet {
+@WebServlet("/ByProvince")
+public class ByProvince extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ByArea() {
+    public ByProvince() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -35,30 +35,27 @@ public class ByArea extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String date ="";
-		if(request.getParameter("date")!=null) {
-			date=Api.convertDateToSql(request.getParameter("date"));
+		String province=request.getParameter("province");
+		String dateParamater=request.getParameter("date");
+		List<Model.Date> temp=(dateParamater!=null)?Data.getByProvinceTop3Limit(Api.convertDateToSql(dateParamater), province):Data.getByProvinceTop3(province);
+		if(temp==null||temp.size()==0) {
+			request.getRequestDispatcher("kqxs-province.jsp").forward(request, response);
+			return;
 		}
-		else {
-			date=LocalDate.now()+"";
-		}
+		String date =temp.get(0).getDate_Fact();
 		LocalDate dateOne = LocalDate.parse(date);
-		LocalDate dateTwo = dateOne.minusDays(1);
-		LocalDate dateThree = dateTwo.minusDays(1);
-		String area=request.getParameter("area");
-		Map<String,List<Data>> map1=Data.KQTheoTinh(dateOne+"", area);
-		Map<String,List<Data>> map2=Data.KQTheoTinh(dateTwo+"", area);
-		Map<String,List<Data>> map3=Data.KQTheoTinh(dateThree+"", area);
+		LocalDate dateTwo = LocalDate.parse(temp.get(1).getDate_Fact());
+		LocalDate dateThree = LocalDate.parse(temp.get(2).getDate_Fact());
+		System.out.println(province);
+		List<Data> list1=Data.getByProvince(dateOne+"", province);
+		List<Data> list2=Data.getByProvince(dateTwo+"", province);
+		List<Data> list3=Data.getByProvince(dateThree+"", province);
 		List<Province> listProvince=Province.getAll();
 		request.setAttribute("listProvince",listProvince);
-		request.setAttribute("list1",map1);
-		request.setAttribute("list2",map2);
-		request.setAttribute("list3",map3);
-		String jspPage="";
-		if(area.equalsIgnoreCase("MB"))jspPage="kqxs-mb.jsp";
-		else if(area.equalsIgnoreCase("MN"))jspPage="kqxs-mn.jsp";
-		else if(area.equalsIgnoreCase("MT"))jspPage="kqxs-mt.jsp";
-		request.getRequestDispatcher(jspPage).forward(request, response);
+		request.setAttribute("list1",list1);
+		request.setAttribute("list2",list2);
+		request.setAttribute("list3",list3);
+		request.getRequestDispatcher("kqxs-province.jsp").forward(request, response);
 	}
 
 	/**

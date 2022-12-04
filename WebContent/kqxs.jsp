@@ -1,3 +1,4 @@
+<%@page import="Model.Province"%>
 <%@page import="Service.Api"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Map.Entry"%>
@@ -10,6 +11,7 @@
 Map<String,List<Data>> mapMB=(Map<String,List<Data>>)request.getAttribute("listMB");
 Map<String,List<Data>> mapMN=(Map<String,List<Data>>)request.getAttribute("listMN");
 Map<String,List<Data>> mapMT=(Map<String,List<Data>>)request.getAttribute("listMT");
+List<Province> listProvince=(List<Province>) request.getAttribute("listProvince");
 String date="";
 String date_of_week="";
 String province="";
@@ -71,63 +73,21 @@ for(Entry<String,List<Data>> entry:mapMB.entrySet()){
 	</div>
 	<div id="content">
 		<section id="left-content">
-			<a href="/xo-so-truc-tiep/"><strong>XỔ SỐ TRỰC TIẾP</strong></a>
+			<a href="<%=request.getContextPath()%>/"><strong>XỔ SỐ TRỰC TIẾP</strong></a>
 			<ul class="menu-tructiep">
-				<li><a href="/xo-so-truc-tiep/mien-bac-xsmb.html">Xổ số
+				<li><a href="<%=request.getContextPath()%>/ByArea?area=MB">Xổ số
 						trực tiếp Miền Bắc</a></li>
-				<li><a href="/xo-so-truc-tiep/mien-nam-xsmn.html">Xổ số
+				<li><a href="<%=request.getContextPath()%>/ByArea?area=MN">Xổ số
 						trực tiếp Miền Nam</a></li>
-				<li><a href="/xo-so-truc-tiep/mien-trung-xsmt.html">Xổ số
+				<li><a href="<%=request.getContextPath()%>/ByArea?area=MT">Xổ số
 						trực tiếp Miền Trung</a></li>
 			</ul>
-			<a href="/xsmn"><strong>XỔ SỐ MIỀN NAM</strong></a>
+			<a href="/xsmn"><strong>XỔ SỐ THEO TỈNH</strong></a>
 			<ul>
-				<li><a href="/xshcm-xstp">TP.HCM</a></li>
-				<li><a href="/xsag">An Giang</a></li>
-				<li><a href="/xsbd">Bình Dương</a></li>
-				<li><a href="/xsbl">Bạc Liêu</a></li>
-				<li><a href="/xsbp">Bình Phước</a></li>
-				<li><a href="/xsbt">Bến Tre</a></li>
-				<li><a href="/xsbth">Bình Thuận</a></li>
-				<li><a href="/xscm">Cà Mau</a></li>
-				<li><a href="/xsct">Cần Thơ</a></li>
-				<li><a href="/xsld-xsdl">Đà Lạt- Lâm Đồng</a></li>
-				<li><a href="/xsdn">Đồng Nai</a></li>
-				<li><a href="/xsdt">Đồng Tháp</a></li>
-				<li><a href="/xshg">Hậu Giang</a></li>
-				<li><a href="/xskg">Kiên Giang</a></li>
-				<li><a href="/xsla">Long An</a></li>
-				<li><a href="/xsst">Sóc Trăng</a></li>
-				<li><a href="/xstg">Tiền Giang</a></li>
-				<li><a href="/xstn">Tây Ninh</a></li>
-				<li><a href="/xstv">Trà Vinh</a></li>
-				<li><a href="/xsvl">Vĩnh Long</a></li>
-				<li><a href="/xsvt">Vũng Tàu</a></li>
+				<%for(Province p:listProvince){ %>
+				<li><a href="<%=request.getContextPath()%>/ByProvince?province=<%=p.getName()%>"><%=p.getName() %></a></li>
+				<%} %>
 			</ul>
-			<a href="/xsmt"><strong>XỔ SỐ MIỀN TRUNG</strong></a>
-			<ul>
-				<li><a href="/xsbdi">Bình Định</a></li>
-				<li><a href="/xsdlk">Đắk Lắk</a></li>
-				<li><a href="/xsdng-xsdna">Đà Nẵng</a></li>
-				<li><a href="/xsdno">Đắk Nông</a></li>
-				<li><a href="/xsgl">Gia Lai</a></li>
-				<li><a href="/xskh">Khánh Hòa</a></li>
-				<li><a href="/xskt">Kon Tum</a></li>
-				<li><a href="/xsnt">Ninh Thuận</a></li>
-				<li><a href="/xspy">Phú Yên</a></li>
-				<li><a href="/xsqb">Quảng Bình</a></li>
-				<li><a href="/xsqng">Quảng Ngãi</a></li>
-				<li><a href="/xsqnm-xsqna">Quảng Nam</a></li>
-				<li><a href="/xsqt">Quảng Trị</a></li>
-				<li><a href="/xstth">Thừa Thiên Huế</a></li>
-			</ul>
-			<strong>XỔ SỐ ĐIỆN TOÁN</strong>
-			<ul>
-				<li><a href="/xsdt123">Xổ số điện toán 123</a></li>
-				<li><a href="/xsdt6x36">Xổ số điện toán 6x36</a></li>
-				<li><a href="/xstt4">Xổ số thần tài 4</a></li>
-			</ul>
-
 		</section>
 		<section id="center-content">
 			<div class="margin6" id="bnc0" style="width: 100%"></div>
@@ -136,14 +96,14 @@ for(Entry<String,List<Data>> entry:mapMB.entrySet()){
 			<div class="clear"></div>
 			<div class="box-ketqua">
 				<h2>
-					<a href="<%=request.getContextPath()%>/ByArea?date=<%=date %>&area=MB">KQXS Miền bắc</a> ngày 
+					<a href="<%=request.getContextPath()%>/ByArea?area=MB">KQXS Miền bắc</a> ngày 
 						<%=date%> (<a href="<%=request.getContextPath()%>/MultiDate?date=<%=date %>&area=MB"><%=date_of_week %></a>)
 				</h2>
 				<div class="box-table">
 					<table class="result" id="MB0">
 					<%if(mapMB.entrySet().size()!=0) {%>
 						<tr>
-							<th colspan="2"><b class=h3><a href="<%=request.getContextPath()%>/ByArea?date=<%=date %>&area=MB">XSMB</a>&gt;
+							<th colspan="2"><b class=h3><a href="<%=request.getContextPath()%>/ByArea?area=MB">XSMB</a>&gt;
 									<a href="<%=request.getContextPath()%>/MultiDate?date=<%=date %>&area=MB"><%=date_of_week %></a> (<%=province %>)</b></th>
 						</tr>
 						<%
@@ -187,7 +147,7 @@ for(Entry<String,List<Data>> entry:mapMB.entrySet()){
 			<div class="clear"></div>
 			<div class="box-ketqua">
 				<h2>
-					<a href="<%=request.getContextPath()%>/ByArea?date=<%=date %>&area=MT">KQXS Miền Trung</a> ngày
+					<a href="<%=request.getContextPath()%>/ByArea?area=MT">KQXS Miền Trung</a> ngày
 						<%=date %> (<a href="<%=request.getContextPath()%>/MultiDate?date=<%=date %>&area=MT"><%=date_of_week %></a>)
 				</h2>
 				<div class="box-table box-table-mn">
@@ -233,7 +193,7 @@ for(Entry<String,List<Data>> entry:mapMB.entrySet()){
 											  <tbody>
 						  						<tr>
 							  						<td class="tinh">
-								  						<a href="/xo-so-mien-trung/binh-dinh.html" title="Xổ Số  Bình Định"><%=entry.getKey() %></a>
+								  						<a href="<%=request.getContextPath()%>/ByProvince?province=<%=entry.getKey()%>"><%=entry.getKey() %></a>
 													</td>
 						  						</tr>
 						  				<%List<Data> values=entry.getValue();
@@ -273,7 +233,7 @@ for(Entry<String,List<Data>> entry:mapMB.entrySet()){
 			</div>
 			<div class="box-ketqua">
 				<h2>
-					<a href="<%=request.getContextPath()%>/ByArea?date=<%=date %>&area=MN">KQXS Miền Nam</a> ngày
+					<a href="<%=request.getContextPath()%>/ByArea?area=MN">KQXS Miền Nam</a> ngày
 						<%=date %> (<a href="<%=request.getContextPath()%>/MultiDate?date=<%=date %>&area=MN"><%=date_of_week %></a>)
 				</h2>
 				<div class="box-table box-table-mn">
@@ -319,7 +279,7 @@ for(Entry<String,List<Data>> entry:mapMB.entrySet()){
 											  <tbody>
 						  						<tr>
 							  						<td class="tinh">
-								  						<a href="/xo-so-mien-trung/binh-dinh.html" title="Xổ Số  Bình Định"><%=entry.getKey() %></a>
+								  						<a href="<%=request.getContextPath()%>/ByProvince?province=<%=entry.getKey()%>"><%=entry.getKey() %></a>
 													</td>
 						  						</tr>
 						  				<%List<Data> values=entry.getValue();

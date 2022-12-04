@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import Model.Data;
+import Model.Province;
 import Service.Api;
 
 /**
@@ -44,11 +45,13 @@ public class Today extends HttpServlet {
 		if(dateParamater!=null) {
 			dateParamater=Api.convertDateToSql(dateParamater);
 		}
-		String today =(dateParamater!=null)?dateParamater:"2022-11-14";
+		String today =(dateParamater!=null)?dateParamater:LocalDate.now()+"";
 		System.out.println("Ngay "+today);
 		Map<String,List<Data>> mapMB=Data.KQTheoTinh(today, "MB");
 		Map<String,List<Data>> mapMN=Data.KQTheoTinh(today, "MN");
 		Map<String,List<Data>> mapMT=Data.KQTheoTinh(today, "MT");
+		List<Province> listProvince=Province.getAll();
+		request.setAttribute("listProvince",listProvince);
 		request.setAttribute("listMB",mapMB);
 		request.setAttribute("listMN",mapMN);
 		request.setAttribute("listMT",mapMT);

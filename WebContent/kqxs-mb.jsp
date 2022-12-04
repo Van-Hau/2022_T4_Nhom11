@@ -1,3 +1,4 @@
+<%@page import="Model.Province"%>
 <%@page import="Service.Api"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Map.Entry"%>
@@ -10,6 +11,7 @@
 Map<String,List<Data>> map1=(Map<String,List<Data>>)request.getAttribute("list1");
 Map<String,List<Data>> map2=(Map<String,List<Data>>)request.getAttribute("list2");
 Map<String,List<Data>> map3=(Map<String,List<Data>>)request.getAttribute("list3");
+List<Province> listProvince=(List<Province>) request.getAttribute("listProvince");
 String date1="";
 String date_of_week1="";
 String province1="";
@@ -93,63 +95,21 @@ for(Entry<String,List<Data>> entry:map3.entrySet()){
 	</div>
 	<div id="content">
 		<section id="left-content">
-			<a href="/xo-so-truc-tiep/"><strong>XỔ SỐ TRỰC TIẾP</strong></a>
+			<a href="<%=request.getContextPath()%>/"><strong>XỔ SỐ TRỰC TIẾP</strong></a>
 			<ul class="menu-tructiep">
-				<li><a href="/xo-so-truc-tiep/mien-bac-xsmb.html">Xổ số
+				<li><a href="<%=request.getContextPath()%>/ByArea?area=MB">Xổ số
 						trực tiếp Miền Bắc</a></li>
-				<li><a href="/xo-so-truc-tiep/mien-nam-xsmn.html">Xổ số
+				<li><a href="<%=request.getContextPath()%>/ByArea?area=MN">Xổ số
 						trực tiếp Miền Nam</a></li>
-				<li><a href="/xo-so-truc-tiep/mien-trung-xsmt.html">Xổ số
+				<li><a href="<%=request.getContextPath()%>/ByArea?area=MT">Xổ số
 						trực tiếp Miền Trung</a></li>
 			</ul>
-			<a href="/xsmn"><strong>XỔ SỐ MIỀN NAM</strong></a>
+			<a href="/xsmn"><strong>XỔ SỐ THEO TỈNH</strong></a>
 			<ul>
-				<li><a href="/xshcm-xstp">TP.HCM</a></li>
-				<li><a href="/xsag">An Giang</a></li>
-				<li><a href="/xsbd">Bình Dương</a></li>
-				<li><a href="/xsbl">Bạc Liêu</a></li>
-				<li><a href="/xsbp">Bình Phước</a></li>
-				<li><a href="/xsbt">Bến Tre</a></li>
-				<li><a href="/xsbth">Bình Thuận</a></li>
-				<li><a href="/xscm">Cà Mau</a></li>
-				<li><a href="/xsct">Cần Thơ</a></li>
-				<li><a href="/xsld-xsdl">Đà Lạt- Lâm Đồng</a></li>
-				<li><a href="/xsdn">Đồng Nai</a></li>
-				<li><a href="/xsdt">Đồng Tháp</a></li>
-				<li><a href="/xshg">Hậu Giang</a></li>
-				<li><a href="/xskg">Kiên Giang</a></li>
-				<li><a href="/xsla">Long An</a></li>
-				<li><a href="/xsst">Sóc Trăng</a></li>
-				<li><a href="/xstg">Tiền Giang</a></li>
-				<li><a href="/xstn">Tây Ninh</a></li>
-				<li><a href="/xstv">Trà Vinh</a></li>
-				<li><a href="/xsvl">Vĩnh Long</a></li>
-				<li><a href="/xsvt">Vũng Tàu</a></li>
+				<%for(Province p:listProvince){ %>
+				<li><a href="<%=request.getContextPath()%>/ByProvince?province=<%=p.getName()%>"><%=p.getName() %></a></li>
+				<%} %>
 			</ul>
-			<a href="/xsmt"><strong>XỔ SỐ MIỀN TRUNG</strong></a>
-			<ul>
-				<li><a href="/xsbdi">Bình Định</a></li>
-				<li><a href="/xsdlk">Đắk Lắk</a></li>
-				<li><a href="/xsdng-xsdna">Đà Nẵng</a></li>
-				<li><a href="/xsdno">Đắk Nông</a></li>
-				<li><a href="/xsgl">Gia Lai</a></li>
-				<li><a href="/xskh">Khánh Hòa</a></li>
-				<li><a href="/xskt">Kon Tum</a></li>
-				<li><a href="/xsnt">Ninh Thuận</a></li>
-				<li><a href="/xspy">Phú Yên</a></li>
-				<li><a href="/xsqb">Quảng Bình</a></li>
-				<li><a href="/xsqng">Quảng Ngãi</a></li>
-				<li><a href="/xsqnm-xsqna">Quảng Nam</a></li>
-				<li><a href="/xsqt">Quảng Trị</a></li>
-				<li><a href="/xstth">Thừa Thiên Huế</a></li>
-			</ul>
-			<strong>XỔ SỐ ĐIỆN TOÁN</strong>
-			<ul>
-				<li><a href="/xsdt123">Xổ số điện toán 123</a></li>
-				<li><a href="/xsdt6x36">Xổ số điện toán 6x36</a></li>
-				<li><a href="/xstt4">Xổ số thần tài 4</a></li>
-			</ul>
-
 		</section>
 		<section id="center-content">
 			<div class="margin6" id="bnc0" style="width: 100%"></div>
@@ -158,14 +118,14 @@ for(Entry<String,List<Data>> entry:map3.entrySet()){
 			<div class="clear"></div>
 			<div class="box-ketqua">
 				<h2>
-					<a href="<%=request.getContextPath()%>/ByArea?date=<%=date1 %>&area=MB">KQXS Miền bắc</a> ngày 
+					<a href="<%=request.getContextPath()%>/ByArea?area=MB">KQXS Miền bắc</a> ngày 
 						<%=date1%> (<a href="<%=request.getContextPath()%>/MultiDate?date=<%=date1 %>&area=MB"><%=date_of_week1 %></a>)
 				</h2>
 				<div class="box-table">
 					<table class="result" id="MB0">
 					<%if(map1.entrySet().size()!=0) {%>
 						<tr>
-							<th colspan="2"><b class=h3><a href="<%=request.getContextPath()%>/ByArea?date=<%=date1 %>&area=MB">XSMB</a>&gt;
+							<th colspan="2"><b class=h3><a href="<%=request.getContextPath()%>/ByArea?area=MB">XSMB</a>&gt;
 									<a href="<%=request.getContextPath()%>/MultiDate?date=<%=date1 %>&area=MB"><%=date_of_week1 %></a> (<%=province1 %>)</b></th>
 						</tr>
 						<%
@@ -209,14 +169,14 @@ for(Entry<String,List<Data>> entry:map3.entrySet()){
 			<div class="clear"></div>
 			<div class="box-ketqua">
 				<h2>
-					<a href="<%=request.getContextPath()%>/ByArea?date=<%=date2 %>&area=MB">KQXS Miền bắc</a> ngày 
+					<a href="<%=request.getContextPath()%>/ByArea?area=MB">KQXS Miền bắc</a> ngày 
 						<%=date2%> (<a href="<%=request.getContextPath()%>/MultiDate?date=<%=date2 %>&area=MB"><%=date_of_week2 %></a>)
 				</h2>
 				<div class="box-table">
 					<table class="result" id="MB0">
 					<%if(map2.entrySet().size()!=0) {%>
 						<tr>
-							<th colspan="2"><b class=h3><a href="<%=request.getContextPath()%>/ByArea?date=<%=date2 %>&area=MB">XSMB</a>&gt;
+							<th colspan="2"><b class=h3><a href="<%=request.getContextPath()%>/ByArea?area=MB">XSMB</a>&gt;
 									<a href="<%=request.getContextPath()%>/MultiDate?date=<%=date2 %>&area=MB"><%=date_of_week2 %></a> (<%=province2 %>)</b></th>
 						</tr>
 						<%
@@ -258,14 +218,14 @@ for(Entry<String,List<Data>> entry:map3.entrySet()){
 			</div>
 			<div class="box-ketqua">
 				<h2>
-					<a href="<%=request.getContextPath()%>/ByArea?date=<%=date1 %>&area=MB">KQXS Miền bắc</a> ngày 
+					<a href="<%=request.getContextPath()%>/ByArea?area=MB">KQXS Miền bắc</a> ngày 
 						<%=date3%>(<a href="<%=request.getContextPath()%>/MultiDate?date=<%=date3 %>&area=MB"><%=date_of_week3 %></a>)
 				</h2>
 				<div class="box-table">
 					<table class="result" id="MB0">
 					<%if(map3.entrySet().size()!=0) {%>
 						<tr>
-							<th colspan="2"><b class=h3><a href="<%=request.getContextPath()%>/ByArea?date=<%=date3 %>&area=MB">XSMB</a>&gt;
+							<th colspan="2"><b class=h3><a href="<%=request.getContextPath()%>/ByArea?area=MB">XSMB</a>&gt;
 									<a href="<%=request.getContextPath()%>/MultiDate?date=<%=date3 %>&area=MB"><%=date_of_week3 %></a> (<%=province3 %>)</b></th>
 						</tr>
 						<%
@@ -351,9 +311,9 @@ for(Entry<String,List<Data>> entry:map3.entrySet()){
 					<div class="cal">
 						<div class="cal-nav">
 							<a href="/ngay/31-10-2022"
-								onclick="monthMove(-1,'/ngay/','toàn quốc','');this.blur();return false;">&lt;&lt;</a>&nbsp;
+								onclick="monthMove(-1,'<%=request.getContextPath()%>/ByArea?area=MB&date=','toàn quốc','');this.blur();return false;">&lt;&lt;</a>&nbsp;
 							<select name="selMonth" id="selMonth"
-								onchange="changeCal('/ngay/','toàn quốc','')"><option
+								onchange="changeCal('<%=request.getContextPath()%>/ByArea?area=MB&date=','toàn quốc','')"><option
 									value="0">Tháng 1</option>
 								<option value="1">Tháng 2</option>
 								<option value="2">Tháng 3</option>
@@ -364,11 +324,11 @@ for(Entry<String,List<Data>> entry:map3.entrySet()){
 								<option value="7">Tháng 8</option>
 								<option value="8">Tháng 9</option>
 								<option value="9">Tháng 10</option>
-								<option value="10" selected="selected">Tháng 11</option>
-								<option value="11">Tháng 12</option></select>&nbsp; <a href="#Month+1"
-								onclick="monthMove(1,'/ngay/','toàn quốc','');this.blur();return false;">&gt;&gt;</a>
+								<option value="10">Tháng 11</option>
+								<option value="11" selected="selected">Tháng 12</option></select>&nbsp; <a href="#Month+1"
+								onclick="monthMove(1,'<%=request.getContextPath()%>/ByArea?area=MB&date=','toàn quốc','');this.blur();return false;">&gt;&gt;</a>
 							<span>&nbsp;</span> <select name="selYear" id="selYear"
-								onchange="changeCal('/ngay/','toàn quốc','')"><option
+								onchange="changeCal('<%=request.getContextPath()%>ByArea?area=MB&date=','toàn quốc','')"><option
 									value="2018">2018</option>
 								<option value="2019">2019</option>
 								<option value="2020">2020</option>
@@ -487,6 +447,7 @@ for(Entry<String,List<Data>> entry:map3.entrySet()){
 					</div>
 				</div>
 			</div>
+			
 			<div class="clear"></div>
 			<div class="margin6">
 				<span></span>
@@ -511,7 +472,9 @@ for(Entry<String,List<Data>> entry:map3.entrySet()){
 	<script src="//s.tainhaccho.vn/js/jq.js"></script>
 	<script src="//s.tainhaccho.vn/xskt023.js"></script>
 	<script>
-		
+	const e = new Event("change");
+	const element = document.querySelector('#selMonth')
+	element.dispatchEvent(e);
 	</script>
 	<a href="#" id="back-to-top" title="Về đầu trang">&nbsp;</a>
 	<script>
