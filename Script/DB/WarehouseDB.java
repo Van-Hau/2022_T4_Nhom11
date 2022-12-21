@@ -258,36 +258,39 @@ public class WarehouseDB {
 		return false;
 		
 	}
-//	public void createDateTable() {
-//		String start="2000-01-01";
-//		String end="3000-12-30";
-//		String[] dates= {"Chủ Nhật","Thứ Hai","Thứ Ba","Thứ Tư","Thứ Năm","Thứ Sáu","Thứ Bảy"};
-////		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-//		LocalDate startDate=LocalDate.parse(start);
-//		LocalDate endDate=LocalDate.parse(end);
-//		int index=1;
-//		while(!startDate.isAfter(endDate)) {
-//			try {
-//				PreparedStatement ps=con.prepareStatement("insert into date_dim(id,date,date_of_week) values(?,?,?)");
-//				ps.setInt(1, (index++));
-//				System.out.println(index);
-//				java.sql.Date dateSQL=java.sql.Date.valueOf(startDate);
-//				ps.setDate(2,dateSQL);
-//				Calendar c = Calendar.getInstance();
-//				c.setTime(dateSQL);
-//				int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
-//				// 1-Chủ nhật, 2-Thứ Hai, 3-Thứ Ba, 4- Thứ 4, ...
-//				ps.setString(3, dates[dayOfWeek-1]);
-//				ps.executeUpdate();
-//				startDate=startDate.plusDays(1);
-//			} catch (SQLException e) {
-//				// TODO Auto-generated catch block
-//			System.out.println("Lỗi SQL");
-//			e.printStackTrace();
-//			}
-//			
-//		}
-//	
-//	}
+	public void createDateTable() {
+		String start="2000-01-01";
+		String end="2050-12-30";
+		String[] dates= {"Chủ Nhật","Thứ Hai","Thứ Ba","Thứ Tư","Thứ Năm","Thứ Sáu","Thứ Bảy"};
+//		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		LocalDate startDate=LocalDate.parse(start);
+		LocalDate endDate=LocalDate.parse(end);
+		int index=1;
+		while(!startDate.isAfter(endDate)) {
+			try {
+				PreparedStatement ps=con.prepareStatement("insert into date_dim(id,date,date_of_week) values(?,?,?)");
+				ps.setInt(1, (index++));
+				System.out.println(index);
+				java.sql.Date dateSQL=java.sql.Date.valueOf(startDate);
+				ps.setDate(2,dateSQL);
+				Calendar c = Calendar.getInstance();
+				c.setTime(dateSQL);
+				int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+				// 1-Chủ nhật, 2-Thứ Hai, 3-Thứ Ba, 4- Thứ 4, ...
+				ps.setString(3, dates[dayOfWeek-1]);
+				ps.executeUpdate();
+				startDate=startDate.plusDays(1);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+			System.out.println("Lỗi SQL");
+			e.printStackTrace();
+			}
+			
+		}
+	
+	}
+	public static void main(String[] args) {
+		WarehouseDB.getInstance().createDateTable();
+	}
 
 }
