@@ -341,7 +341,7 @@ public void getMultiDay() {
 		System.out.println("Không tồn tại file Config");
 		return;
 	}
-	List<String> dates=getListDate("2022-12-18", "2022-12-21");
+	List<String> dates=getListDate("2022-12-20", "2022-12-24");
 	if(dates.size()==0) {
 		System.out.println("Start date have to more than End date !");
 		return ;

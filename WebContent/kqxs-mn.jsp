@@ -1,4 +1,5 @@
 <%@page import="Model.Province"%>
+<%@page import="Service.General"%>
 <%@page import="Service.Api"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Map.Entry"%>
@@ -9,6 +10,7 @@
 <!DOCTYPE html>
 <%
 Map<String,List<Data>> map1=(Map<String,List<Data>>)request.getAttribute("list1");
+
 Map<String,List<Data>> map2=(Map<String,List<Data>>)request.getAttribute("list2");
 Map<String,List<Data>> map3=(Map<String,List<Data>>)request.getAttribute("list3");
 List<Province> listProvince=(List<Province>) request.getAttribute("listProvince");
@@ -39,20 +41,16 @@ for(Entry<String,List<Data>> entry:map3.entrySet()){
 	date_of_week3=value.getDate_of_week();
 	break;
 }}
-
 %>
 <html lang="vi">
-<script src="https://code.jquery.com/jquery-1.12.4.min.js"
-	integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
-	crossorigin="anonymous"></script>
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
+
 <head>
 <title>Kết quả xổ số kiến thiết 3 miền- XO SO- KQXS</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="robots" content="index,follow">
 <link rel="canonical" href="https://xskt.com.vn/">
 <link rel="amphtml" href="https://xskt.com.vn/amp">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/today.css">
 <meta name="description"
 	content="Trực tiếp kết quả xổ số Miền Bắc, Miền Nam, Miền Trung, XS điện toán Vietlott. Thống kê, soi cầu miễn phí. Kqxs; xo so kien thiet - XSKT, so xo; xoso">
@@ -76,6 +74,11 @@ for(Entry<String,List<Data>> entry:map3.entrySet()){
 "url":"https://xskt.com.vn/"
 }
  </script>
+<script src="${pageContext.request.contextPath}/lib/dist/xlsx.bundle.js"></script>
+
+ <script src="https://code.jquery.com/jquery-3.3.1.js" type="text/javascript"></script>
+<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
 </head>
 <body>
 	<div id="header">
@@ -119,7 +122,7 @@ for(Entry<String,List<Data>> entry:map3.entrySet()){
 						<%=date1 %> (<a href="<%=request.getContextPath()%>/MultiDate?date=<%=date1 %>&area=MN"><%=date_of_week1 %></a>)
 				</h2>
 				<div class="box-table box-table-mn">
-					<table border="0" cellpadding="0" cellspacing="0" class="bkqmiennam" width="100%">
+					<table border="0" cellpadding="0" cellspacing="0" class="bkqmiennam" width="100%" id="mn01">
 						<tbody>
 						  <tr>
 							<td width="100" class="giai"><table cellpadding="0" cellspacing="0" class="leftcl" width="100%">
@@ -593,6 +596,7 @@ for(Entry<String,List<Data>> entry:map3.entrySet()){
 
 </body>
 <script>
+$.noConflict();
 	(function() {
 		var form = $('.form'), cache_width = form.width(), a4 = [ 595.28,
 				841.89 ]; // for a4 size paper width and height  
@@ -624,6 +628,35 @@ for(Entry<String,List<Data>> entry:map3.entrySet()){
 		}
 
 	}());
+// Excel
+var data=JSON.parse('<%=General.convertToJsonFromMap(map1, date_of_week1,date1)%>');
+var workbook = XLSX.utils.book_new(),
+    worksheet = XLSX.utils.aoa_to_sheet(data);
+var merge = [{ s: {r:3, c:0}, e: {r:5, c:0} },
+	{ s: {r:7, c:0}, e: {r:13, c:0} },
+	{ s: {r:14, c:0}, e: {r:15, c:0} }
+];
+if(!worksheet['!merges']) worksheet['!merges'] = [];
+worksheet['!merges']=merge;
+
+worksheet["A4"].s = {
+		alignment: {
+			vertical: "center",
+		},
+	};
+worksheet["A8"].s = {
+		alignment: {
+			vertical: "center",
+		},
+	};
+worksheet["A15"].s = {
+		alignment: {
+			vertical: "center",
+		},
+	};
+workbook.SheetNames.push("First");
+workbook.Sheets["First"] = worksheet;
+XLSX.writeFile(workbook, "demo.xlsx");
 </script>
 
 </html>

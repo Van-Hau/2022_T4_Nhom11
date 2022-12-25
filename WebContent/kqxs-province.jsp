@@ -103,13 +103,7 @@ for(Data data:list3){
 				<li><a href="<%=request.getContextPath()%>/ByProvince?province=<%=p.getName()%>"><%=p.getName() %></a></li>
 				<%} %>
 			</ul>
-			<strong>XỔ SỐ ĐIỆN TOÁN</strong>
-			<ul>
-				<li><a href="/xsdt123">Xổ số điện toán 123</a></li>
-				<li><a href="/xsdt6x36">Xổ số điện toán 6x36</a></li>
-				<li><a href="/xstt4">Xổ số thần tài 4</a></li>
-			</ul>
-
+			
 		</section>
 		<section id="center-content">
 			<div class="margin6" id="bnc0" style="width: 100%"></div>
