@@ -73,20 +73,26 @@ for(Entry<String,List<Data>> entry:mapMB.entrySet()){
 	</div>
 	<div id="content">
 		<section id="left-content">
-			<a href="<%=request.getContextPath()%>/"><strong>XỔ SỐ TRỰC TIẾP</strong></a>
+			<a href="<%=request.getContextPath()%>/"><strong>XỔ SỐ
+					TRỰC TIẾP</strong></a>
 			<ul class="menu-tructiep">
-				<li><a href="<%=request.getContextPath()%>/ByArea?area=MB">Xổ số
-						trực tiếp Miền Bắc</a></li>
-				<li><a href="<%=request.getContextPath()%>/ByArea?area=MN">Xổ số
-						trực tiếp Miền Nam</a></li>
-				<li><a href="<%=request.getContextPath()%>/ByArea?area=MT">Xổ số
-						trực tiếp Miền Trung</a></li>
+				<li><a href="<%=request.getContextPath()%>/ByArea?area=MB">Xổ
+						số trực tiếp Miền Bắc</a></li>
+				<li><a href="<%=request.getContextPath()%>/ByArea?area=MN">Xổ
+						số trực tiếp Miền Nam</a></li>
+				<li><a href="<%=request.getContextPath()%>/ByArea?area=MT">Xổ
+						số trực tiếp Miền Trung</a></li>
 			</ul>
 			<a href="/xsmn"><strong>XỔ SỐ THEO TỈNH</strong></a>
 			<ul>
-				<%for(Province p:listProvince){ %>
-				<li><a href="<%=request.getContextPath()%>/ByProvince?province=<%=p.getName()%>"><%=p.getName() %></a></li>
-				<%} %>
+				<%
+				for (Province p : listProvince) {
+				%>
+				<li><a
+					href="<%=request.getContextPath()%>/ByProvince?province=<%=p.getName()%>"><%=p.getName()%></a></li>
+				<%
+				}
+				%>
 			</ul>
 		</section>
 		<section id="center-content">
@@ -94,230 +100,302 @@ for(Entry<String,List<Data>> entry:mapMB.entrySet()){
 			<div class="clear"></div>
 			<a id="mien-bac"></a>
 			<div class="clear"></div>
-			<div class="box-ketqua">
+			<div class="box-ketqua" id="box-ketqua-mb">
 				<h2>
-					<a href="<%=request.getContextPath()%>/ByArea?area=MB">KQXS Miền bắc</a> ngày 
-						<%=date%> (<a href="<%=request.getContextPath()%>/MultiDate?date=<%=date %>&area=MB"><%=date_of_week %></a>)
+					<a href="<%=request.getContextPath()%>/ByArea?area=MB">KQXS
+						Miền bắc</a> ngày
+					<%=date%>
+					(<a
+						href="<%=request.getContextPath()%>/MultiDate?date=<%=date%>&area=MB"><%=date_of_week%></a>)
 				</h2>
 				<div class="box-table">
 					<table class="result" id="MB0">
-					<%if(mapMB.entrySet().size()!=0) {%>
+						<%
+						if (mapMB.entrySet().size() != 0) {
+						%>
 						<tr>
-							<th colspan="2"><b class=h3><a href="<%=request.getContextPath()%>/ByArea?area=MB">XSMB</a>&gt;
-									<a href="<%=request.getContextPath()%>/MultiDate?date=<%=date %>&area=MB"><%=date_of_week %></a> (<%=province %>)</b></th>
+							<th colspan="2"><b class=h3><a
+									href="<%=request.getContextPath()%>/ByArea?area=MB">XSMB</a>&gt;
+									<a
+									href="<%=request.getContextPath()%>/MultiDate?date=<%=date%>&area=MB"><%=date_of_week%></a>
+									(<%=province%>)</b></th>
 						</tr>
 						<%
-						for(Entry<String,List<Data>> entry:mapMB.entrySet()){
-							List<Data> values=entry.getValue();
-							Map<String,List<Data>> listByAward=Data.filterAward(values);
-							List<String> listAward=new ArrayList<String>();
+						for (Entry<String, List<Data>> entry : mapMB.entrySet()) {
+							List<Data> values = entry.getValue();
+							Map<String, List<Data>> listByAward = Data.filterAward(values);
+							List<String> listAward = new ArrayList<String>();
 							listAward.addAll(listByAward.keySet());
-							for(int i=listAward.size()-1;i>=0;i--){
-								List<Data> valuesByAward=listByAward.get(listAward.get(i));
-								int weight=100;
-								if(valuesByAward.size()>4){
-									int coefficient=valuesByAward.size()/2;
-									weight=weight/coefficient;
+							for (int i = listAward.size() - 1; i >= 0; i--) {
+								List<Data> valuesByAward = listByAward.get(listAward.get(i));
+								int weight = 100;
+								if (valuesByAward.size() > 4) {
+							int coefficient = valuesByAward.size() / 2;
+							weight = weight / coefficient;
+								} else
+							weight = weight / valuesByAward.size();
+								if (i == listAward.size() - 1) {
+						%>
+						<tr>
+							<td title="<%=valuesByAward.get(0).getName_award_Fact()%>"><%=valuesByAward.get(0).getName_award_Fact()%></td>
+							<td><div style="width: <%=weight%>%;" class="red-text"><%=valuesByAward.get(0).getNumberResultReal()%></div></td>
+						</tr>
+						<%
+						} else {
+						%>
+						<tr>
+							<td title="<%=valuesByAward.get(0).getName_award_Fact()%>"><%=valuesByAward.get(0).getName_award_Fact()%></td>
+							<td>
+								<%
+								for (Data data : valuesByAward) {
+								%>
+								<div style="width: <%=weight%>%;"><%=data.getNumberResultReal()%></div>
+								<%
 								}
-								else weight=weight/valuesByAward.size();
-								if(i==listAward.size()-1){%>
-								<tr>
-									<td title="<%=valuesByAward.get(0).getName_award_Fact()%>"><%=valuesByAward.get(0).getName_award_Fact()%></td>
-										<td><div style="width: <%=weight%>%;" class="red-text"><%=valuesByAward.get(0).getNumberResultReal()%></div></td>
-									</tr>
-								<%} else {%>
-								<tr>
-									<td title="<%=valuesByAward.get(0).getName_award_Fact()%>"><%=valuesByAward.get(0).getName_award_Fact()%></td>
-									<td>
-									<% for(Data data:valuesByAward){	
-									%>
-										<div style="width: <%=weight%>%;"><%=data.getNumberResultReal()%></div>
-									<%} %>
-									</td>
-								</tr>	
-								<%}} %>
-						<%}}%>
-						
+								%>
+							</td>
+						</tr>
+						<%
+						}
+						}
+						%>
+						<%
+						}
+						}
+						%>
+
 					</table>
 
+				</div>
+				<div class="mt-4 mb-4" id="export-mb">
+					<button type="button" class="btn btn-warning pt-5 pb-5 pl-5 pr-5" style="background-color: orange; border-radius: 5px">Xuất vé dò</button>
+					<div style="height: 10px"></div>
 				</div>
 				<div class="clear"></div>
 			</div>
 			<div class="margin6" id="bnc2"></div>
 			<div class="clear"></div>
-			<div class="box-ketqua">
+			<div class="box-ketqua" id="box-ketqua-mt">
 				<h2>
-					<a href="<%=request.getContextPath()%>/ByArea?area=MT">KQXS Miền Trung</a> ngày
-						<%=date %> (<a href="<%=request.getContextPath()%>/MultiDate?date=<%=date %>&area=MT"><%=date_of_week %></a>)
+					<a href="<%=request.getContextPath()%>/ByArea?area=MT">KQXS
+						Miền Trung</a> ngày
+					<%=date%>
+					(<a
+						href="<%=request.getContextPath()%>/MultiDate?date=<%=date%>&area=MT"><%=date_of_week%></a>)
 				</h2>
 				<div class="box-table box-table-mn">
-					<table border="0" cellpadding="0" cellspacing="0" class="bkqmiennam" width="100%">
+					<table border="0" cellpadding="0" cellspacing="0"
+						class="bkqmiennam" width="100%">
 						<tbody>
-						  <tr>
-							<td width="100" class="giai"><table cellpadding="0" cellspacing="0" class="leftcl" width="100%">
-								<tbody>
-								  <tr>
-									<td class="thu"><a href="<%=request.getContextPath()%>/MultiDate?date=<%=date %>&area=MT" title="Click xem tất cả KQXS Miền Trung ngày Thứ năm"><%=date_of_week %></a></td>
-								  </tr>
-							<%
-							for(Entry<String,List<Data>> entry:mapMT.entrySet()){
-							List<Data> values=entry.getValue();
-							Map<String,List<Data>> listByAward=Data.filterAward(values);
-							List<String> listAward=new ArrayList<String>();
-							listAward.addAll(listByAward.keySet());
-							for(int i=0;i<listAward.size();i++){
-								String key=listAward.get(i);
-								List<Data> valuesByAward=listByAward.get(key);
-							
-								int height=22;
-								if(valuesByAward.size()>0){
-									height=height*valuesByAward.size();
-								}
-								%>
-								 <tr>
-									<td class="<%=key %>" style="height: <%=height%>px;" ><%=key%></td>
-								  </tr>
-								<%}
-								break;
-							}%>
-								</tbody>
-							  </table></td>
-							<td valign="top" class="tinhs"> 
-								<table width="100%" border="0" cellspacing="0" cellpadding="0">
-									<tr>
-									<%
-									for(Entry<String,List<Data>> entry:mapMT.entrySet()){						
-									%>
-								 		<td valign="top" class="tinh-column">
-											<table class="rightcl" width="100%">
-											  <tbody>
-						  						<tr>
-							  						<td class="tinh">
-								  						<a href="<%=request.getContextPath()%>/ByProvince?province=<%=entry.getKey()%>"><%=entry.getKey() %></a>
-													</td>
-						  						</tr>
-						  				<%List<Data> values=entry.getValue();
-						  				Map<String,List<Data>> listByAward=Data.filterAward(values);
-										List<String> listAward=new ArrayList<String>();
-										listAward.addAll(listByAward.keySet());
-										for(int i=0;i<listAward.size();i++){
-											String key=listAward.get(i);
-											List<Data> valuesByAward=listByAward.get(key);
-											if(i==listAward.size()-1){
-						  				%>
-						  						<tr>
-							  						<td class="<%=key%>">
-											  			<div class="red-text"><%=valuesByAward.get(0).getNumberResultReal() %></div>
-							  						</td>
-						  						</tr>
-						  						<%} else{%>
-						  						<tr>
-							  						<td class="<%=key%>">
-							  			<%	for(Data d:valuesByAward){%>
-							  							<div><%=d.getNumberResultReal() %></div>
-							  			<%}%>
-							  						</td>
-						  						</tr>
-						  						<%}} %>					 
-											  </tbody>
-											</table>
-										</td>
-									<%}%>
-									</tr>
-								</table>
-							</td>
-						  </tr>
+							<tr>
+								<td width="100" class="giai"><table cellpadding="0"
+										cellspacing="0" class="leftcl" width="100%">
+										<tbody>
+											<tr>
+												<td class="thu"><a
+													href="<%=request.getContextPath()%>/MultiDate?date=<%=date%>&area=MT"
+													title="Click xem tất cả KQXS Miền Trung ngày Thứ năm"><%=date_of_week%></a></td>
+											</tr>
+											<%
+											for (Entry<String, List<Data>> entry : mapMT.entrySet()) {
+												List<Data> values = entry.getValue();
+												Map<String, List<Data>> listByAward = Data.filterAward(values);
+												List<String> listAward = new ArrayList<String>();
+												listAward.addAll(listByAward.keySet());
+												for (int i = 0; i < listAward.size(); i++) {
+													String key = listAward.get(i);
+													List<Data> valuesByAward = listByAward.get(key);
+
+													int height = 22;
+													if (valuesByAward.size() > 0) {
+												height = height * valuesByAward.size();
+													}
+											%>
+											<tr>
+												<td class="<%=key%>" style="height: <%=height%>px;"><%=key%></td>
+											</tr>
+											<%
+											}
+											break;
+											}
+											%>
+										</tbody>
+									</table></td>
+								<td valign="top" class="tinhs">
+									<table width="100%" border="0" cellspacing="0" cellpadding="0">
+										<tr>
+											<%
+											for (Entry<String, List<Data>> entry : mapMT.entrySet()) {
+											%>
+											<td valign="top" class="tinh-column">
+												<table class="rightcl" width="100%">
+													<tbody>
+														<tr>
+															<td class="tinh"><a
+																href="<%=request.getContextPath()%>/ByProvince?province=<%=entry.getKey()%>"><%=entry.getKey()%></a>
+															</td>
+														</tr>
+														<%
+														List<Data> values = entry.getValue();
+														Map<String, List<Data>> listByAward = Data.filterAward(values);
+														List<String> listAward = new ArrayList<String>();
+														listAward.addAll(listByAward.keySet());
+														for (int i = 0; i < listAward.size(); i++) {
+															String key = listAward.get(i);
+															List<Data> valuesByAward = listByAward.get(key);
+															if (i == listAward.size() - 1) {
+														%>
+														<tr>
+															<td class="<%=key%>">
+																<div class="red-text"><%=valuesByAward.get(0).getNumberResultReal()%></div>
+															</td>
+														</tr>
+														<%
+														} else {
+														%>
+														<tr>
+															<td class="<%=key%>">
+																<%
+																for (Data d : valuesByAward) {
+																%>
+																<div><%=d.getNumberResultReal()%></div> <%
+ }
+ %>
+															</td>
+														</tr>
+														<%
+														}
+														}
+														%>
+													</tbody>
+												</table>
+											</td>
+											<%
+											}
+											%>
+										</tr>
+									</table>
+								</td>
+							</tr>
 						</tbody>
-					  </table>
+					</table>
+				</div>
+				<div class="mt-4 mb-4" id="export-mt">
+					<button type="button" class="btn btn-warning pt-5 pb-5 pl-5 pr-5" style="background-color: orange; border-radius: 5px">Xuất vé dò</button>
+					<div style="height: 10px"></div>
 				</div>
 			</div>
-			<div class="box-ketqua">
+			<div class="box-ketqua" id="box-ketqua-mn">
 				<h2>
-					<a href="<%=request.getContextPath()%>/ByArea?area=MN">KQXS Miền Nam</a> ngày
-						<%=date %> (<a href="<%=request.getContextPath()%>/MultiDate?date=<%=date %>&area=MN"><%=date_of_week %></a>)
+					<a href="<%=request.getContextPath()%>/ByArea?area=MN">KQXS
+						Miền Nam</a> ngày
+					<%=date%>
+					(<a
+						href="<%=request.getContextPath()%>/MultiDate?date=<%=date%>&area=MN"><%=date_of_week%></a>)
 				</h2>
 				<div class="box-table box-table-mn">
-					<table border="0" cellpadding="0" cellspacing="0" class="bkqmiennam" width="100%">
+					<table border="0" cellpadding="0" cellspacing="0"
+						class="bkqmiennam" width="100%">
 						<tbody>
-						  <tr>
-							<td width="100" class="giai"><table cellpadding="0" cellspacing="0" class="leftcl" width="100%">
-								<tbody>
-								  <tr>
-									<td class="thu"> <a href="<%=request.getContextPath()%>/MultiDate?date=<%=date %>&area=MN" title="Click xem tất cả KQXS Miền Trung ngày Thứ năm"><%=date_of_week %></a></td>
-								  </tr>
-							<%
-							for(Entry<String,List<Data>> entry:mapMN.entrySet()){
-							List<Data> values=entry.getValue();
-							Map<String,List<Data>> listByAward=Data.filterAward(values);
-							List<String> listAward=new ArrayList<String>();
-							listAward.addAll(listByAward.keySet());
-							for(int i=0;i<listAward.size();i++){
-								String key=listAward.get(i);
-								List<Data> valuesByAward=listByAward.get(key);
-							
-								int height=22;
-								if(valuesByAward.size()>0){
-									height=height*valuesByAward.size();
-								}
-								%>
-								 <tr>
-									<td class="<%=key %>" style="height: <%=height%>px;" ><%=key%></td>
-								  </tr>
-								<%}
-								break;
-							}%>
-								</tbody>
-							  </table></td>
-							<td valign="top" class="tinhs"> 
-								<table width="100%" border="0" cellspacing="0" cellpadding="0">
-									<tr>
-									<%
-									for(Entry<String,List<Data>> entry:mapMN.entrySet()){						
-									%>
-								 		<td valign="top" class="tinh-column">
-											<table class="rightcl" width="100%">
-											  <tbody>
-						  						<tr>
-							  						<td class="tinh">
-								  						<a href="<%=request.getContextPath()%>/ByProvince?province=<%=entry.getKey()%>"><%=entry.getKey() %></a>
-													</td>
-						  						</tr>
-						  				<%List<Data> values=entry.getValue();
-						  				Map<String,List<Data>> listByAward=Data.filterAward(values);
-										List<String> listAward=new ArrayList<String>();
-										listAward.addAll(listByAward.keySet());
-										for(int i=0;i<listAward.size();i++){
-											String key=listAward.get(i);
-											List<Data> valuesByAward=listByAward.get(key);
-											if(i==listAward.size()-1){
-						  				%>
-						  						<tr>
-							  						<td class="<%=key%>">
-											  			<div class="red-text"><%=valuesByAward.get(0).getNumberResultReal() %></div>
-							  						</td>
-						  						</tr>
-						  						<%} else{%>
-						  						<tr>
-							  						<td class="<%=key%>">
-							  			<%	for(Data d:valuesByAward){%>
-							  							<div><%=d.getNumberResultReal() %></div>
-							  			<%}%>
-							  						</td>
-						  						</tr>
-						  						<%}} %>					 
-											  </tbody>
-											</table>
-										</td>
-									<%}%>
-									</tr>
-								</table>
-							</td>
-						  </tr>
+							<tr>
+								<td width="100" class="giai"><table cellpadding="0"
+										cellspacing="0" class="leftcl" width="100%">
+										<tbody>
+											<tr>
+												<td class="thu"><a
+													href="<%=request.getContextPath()%>/MultiDate?date=<%=date%>&area=MN"
+													title="Click xem tất cả KQXS Miền Trung ngày Thứ năm"><%=date_of_week%></a></td>
+											</tr>
+											<%
+											for (Entry<String, List<Data>> entry : mapMN.entrySet()) {
+												List<Data> values = entry.getValue();
+												Map<String, List<Data>> listByAward = Data.filterAward(values);
+												List<String> listAward = new ArrayList<String>();
+												listAward.addAll(listByAward.keySet());
+												for (int i = 0; i < listAward.size(); i++) {
+													String key = listAward.get(i);
+													List<Data> valuesByAward = listByAward.get(key);
+
+													int height = 22;
+													if (valuesByAward.size() > 0) {
+												height = height * valuesByAward.size();
+													}
+											%>
+											<tr>
+												<td class="<%=key%>" style="height: <%=height%>px;"><%=key%></td>
+											</tr>
+											<%
+											}
+											break;
+											}
+											%>
+										</tbody>
+									</table></td>
+								<td valign="top" class="tinhs">
+									<table width="100%" border="0" cellspacing="0" cellpadding="0">
+										<tr>
+											<%
+											for (Entry<String, List<Data>> entry : mapMN.entrySet()) {
+											%>
+											<td valign="top" class="tinh-column">
+												<table class="rightcl" width="100%">
+													<tbody>
+														<tr>
+															<td class="tinh"><a
+																href="<%=request.getContextPath()%>/ByProvince?province=<%=entry.getKey()%>"><%=entry.getKey()%></a>
+															</td>
+														</tr>
+														<%
+														List<Data> values = entry.getValue();
+														Map<String, List<Data>> listByAward = Data.filterAward(values);
+														List<String> listAward = new ArrayList<String>();
+														listAward.addAll(listByAward.keySet());
+														for (int i = 0; i < listAward.size(); i++) {
+															String key = listAward.get(i);
+															List<Data> valuesByAward = listByAward.get(key);
+															if (i == listAward.size() - 1) {
+														%>
+														<tr>
+															<td class="<%=key%>">
+																<div class="red-text"><%=valuesByAward.get(0).getNumberResultReal()%></div>
+															</td>
+														</tr>
+														<%
+														} else {
+														%>
+														<tr>
+															<td class="<%=key%>">
+																<%
+																for (Data d : valuesByAward) {
+																%>
+																<div><%=d.getNumberResultReal()%></div> <%
+ }
+ %>
+															</td>
+														</tr>
+														<%
+														}
+														}
+														%>
+													</tbody>
+												</table>
+											</td>
+											<%
+											}
+											%>
+										</tr>
+									</table>
+								</td>
+							</tr>
 						</tbody>
-					  </table>
+					</table>
+				</div>
+				<div class="mt-4 mb-4" id="export-mn">
+					<button type="button" class="btn btn-warning pt-5 pb-5 pl-5 pr-5" style="background-color: orange; border-radius: 5px">Xuất vé dò</button>
+					<div style="height: 10px"></div>
 				</div>
 			</div>
-			
+
 			<div class="clear"></div>
 			<div class="clear"></div>
 			<div class="clear"></div>
@@ -376,7 +454,8 @@ for(Entry<String,List<Data>> entry:mapMB.entrySet()){
 								<option value="8">Tháng 9</option>
 								<option value="9">Tháng 10</option>
 								<option value="10">Tháng 11</option>
-								<option value="11" selected="selected">Tháng 12</option></select>&nbsp; <a href="#Month+1"
+								<option value="11" selected="selected">Tháng 12</option></select>&nbsp; <a
+								href="#Month+1"
 								onclick="monthMove(1,'<%=request.getContextPath()%>?date=','toàn quốc','');this.blur();return false;">&gt;&gt;</a>
 							<span>&nbsp;</span> <select name="selYear" id="selYear"
 								onchange="changeCal('<%=request.getContextPath()%>?date=','toàn quốc','')"><option
@@ -522,9 +601,9 @@ for(Entry<String,List<Data>> entry:mapMB.entrySet()){
 	<script src="//s.tainhaccho.vn/js/jq.js"></script>
 	<script src="//s.tainhaccho.vn/xskt023.js"></script>
 	<script>
-	const e = new Event("change");
-	const element = document.querySelector('#selMonth')
-	element.dispatchEvent(e);
+		const e = new Event("change");
+		const element = document.querySelector('#selMonth')
+		element.dispatchEvent(e);
 	</script>
 	<a href="#" id="back-to-top" title="Về đầu trang">&nbsp;</a>
 	<script>
@@ -534,13 +613,85 @@ for(Entry<String,List<Data>> entry:mapMB.entrySet()){
 	</script>
 
 </body>
-<script>
-	(function() {
-		var form = $('.form'), cache_width = form.width(), a4 = [ 595.28,
-				841.89 ]; // for a4 size paper width and height  
 
-		$('#create_pdf').on('click', function() {
-			$('body').scrollTop(0);
+<script>
+(function() {
+	var form = $('#box-ketqua-mb'), cache_width = form.width(), a4 = [ 595.28,
+			841.89 ]; // for a4 size paper width and height  
+			
+	$('#export-mb').on('click', function() {
+		 $([document.documentElement, document.body]).animate({
+		        scrollTop: $("#box-ketqua-mb").offset().top
+		    }, 100);
+		$('#box-ketqua-mb').scrollTop(0);
+		createPDF();
+	});
+	//create pdf  
+	function createPDF() {
+		getCanvas().then(function(canvas) {
+			var img = canvas.toDataURL("image/png"), doc = new jsPDF({
+				unit : 'px',
+				format : 'a4'
+			});
+			doc.addImage(img, 'JPEG', 20, 20);
+			doc.save('ket-qu-so-xo-mb.pdf'); //Tên cái file lưu xuống
+			form.width(cache_width);
+		});
+	}
+
+	// create canvas object  
+	function getCanvas() {
+		form.width((a4[0] * 1.33333) - 80).css('max-width', 'none');
+		return html2canvas(form, {
+			imageTimeout : 2000,
+			removeContainer : true
+		});
+	}
+
+}());
+(function() {
+	var form = $('#box-ketqua-mt'), cache_width = form.width(), a4 = [ 595.28,
+			841.89 ]; // for a4 size paper width and height  
+			
+	$('#export-mt').on('click', function() {
+		 $([document.documentElement, document.body]).animate({
+		        scrollTop: $("#box-ketqua-mt").offset().top
+		    }, 100);
+		$('#box-ketqua-mt').scrollTop(0);
+		createPDF();
+	});
+	//create pdf  
+	function createPDF() {
+		getCanvas().then(function(canvas) {
+			var img = canvas.toDataURL("image/png"), doc = new jsPDF({
+				unit : 'px',
+				format : 'a4'
+			});
+			doc.addImage(img, 'JPEG', 20, 20);
+			doc.save('ket-qua-xo-so-mt.pdf'); //Tên cái file lưu xuống
+			form.width(cache_width);
+		});
+	}
+
+	// create canvas object  
+	function getCanvas() {
+		form.width((a4[0] * 1.33333) - 80).css('max-width', 'none');
+		return html2canvas(form, {
+			imageTimeout : 2000,
+			removeContainer : true
+		});
+	}
+
+}());
+	(function() {
+		var form = $('#box-ketqua-mn'), cache_width = form.width(), a4 = [ 595.28,
+				841.89 ]; // for a4 size paper width and height  
+				
+		$('#export-mn').on('click', function() {
+			 $([document.documentElement, document.body]).animate({
+			        scrollTop: $("#box-ketqua-mn").offset().top
+			    }, 100);
+			$('#box-ketqua-mn').scrollTop(0);
 			createPDF();
 		});
 		//create pdf  
@@ -551,7 +702,7 @@ for(Entry<String,List<Data>> entry:mapMB.entrySet()){
 					format : 'a4'
 				});
 				doc.addImage(img, 'JPEG', 20, 20);
-				doc.save('Bhavdip-html-to-pdf.pdf'); //Tên cái file lưu xuống
+				doc.save('ket-qua-xo-so-mn.pdf'); //Tên cái file lưu xuống
 				form.width(cache_width);
 			});
 		}
@@ -567,5 +718,4 @@ for(Entry<String,List<Data>> entry:mapMB.entrySet()){
 
 	}());
 </script>
-
 </html>
