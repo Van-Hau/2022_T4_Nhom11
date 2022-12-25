@@ -341,7 +341,7 @@ public void getMultiDay() {
 		System.out.println("Không tồn tại file Config");
 		return;
 	}
-	List<String> dates=getListDate("2022-12-20", "2022-12-24");
+	List<String> dates=getListDate("2022-12-24", "2022-12-25");
 	if(dates.size()==0) {
 		System.out.println("Start date have to more than End date !");
 		return ;
@@ -387,8 +387,8 @@ public void setSchedule() {
 //29
 	public static void main(String[] args) throws IOException, ClassNotFoundException, SQLException, ParseException {
 		ScrappingKQXS sm = new ScrappingKQXS();
-		//sm.getDateNow();
-		sm.getMultiDay();
+		sm.getDateNow();
+		//sm.getMultiDay();
 		
 		//System.out.println(formattedString);
 		//sm.updateAwardDimension();

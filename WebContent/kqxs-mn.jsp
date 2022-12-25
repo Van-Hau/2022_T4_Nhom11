@@ -50,7 +50,6 @@ for(Entry<String,List<Data>> entry:map3.entrySet()){
 <meta name="robots" content="index,follow">
 <link rel="canonical" href="https://xskt.com.vn/">
 <link rel="amphtml" href="https://xskt.com.vn/amp">
-<link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/today.css">
 <meta name="description"
 	content="Trực tiếp kết quả xổ số Miền Bắc, Miền Nam, Miền Trung, XS điện toán Vietlott. Thống kê, soi cầu miễn phí. Kqxs; xo so kien thiet - XSKT, so xo; xoso">
@@ -74,11 +73,10 @@ for(Entry<String,List<Data>> entry:map3.entrySet()){
 "url":"https://xskt.com.vn/"
 }
  </script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script> 
 <script src="${pageContext.request.contextPath}/lib/dist/xlsx.bundle.js"></script>
-
  <script src="https://code.jquery.com/jquery-3.3.1.js" type="text/javascript"></script>
-<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js" type="text/javascript"></script>
-<script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
 </head>
 <body>
 	<div id="header">
@@ -116,7 +114,7 @@ for(Entry<String,List<Data>> entry:map3.entrySet()){
 			<div class="clear"></div>
 			<a id="mien-bac"></a>
 			<div class="clear"></div>
-			<div class="box-ketqua">
+			<div class="box-ketqua" id="box-ketqua-mn01">
 				<h2>
 					<a href="<%=request.getContextPath()%>/ByArea?area=MN">KQXS Miền Nam</a> ngày
 						<%=date1 %> (<a href="<%=request.getContextPath()%>/MultiDate?date=<%=date1 %>&area=MN"><%=date_of_week1 %></a>)
@@ -201,17 +199,25 @@ for(Entry<String,List<Data>> entry:map3.entrySet()){
 						</tbody>
 					  </table>
 				</div>
+				<div class="mt-4 mb-4">
+					<button type="button" id="export-mn01" class="btn btn-warning pt-5 pb-5 pl-5 pr-5" style="background-color: orange; border-radius: 5px">Xuất vé dò</button>
+					<div style="height: 10px"></div>
+				</div>
+				<div class="mt-4 mb-4">
+					<button type="button" id="export-excel-mn01" class="btn btn-warning pt-5 pb-5 pl-5 pr-5" style="background-color: orange; border-radius: 5px">Xuất file Excel</button>
+					<div style="height: 10px"></div>
+				</div>
 				<div class="clear"></div>
 			</div>
 			<div class="margin6" id="bnc2"></div>
 			<div class="clear"></div>
-			<div class="box-ketqua">
+			<div class="box-ketqua" id="box-ketqua-mn02">
 				<h2>
 					<a href="<%=request.getContextPath()%>/ByArea?area=MN">KQXS Miền Nam</a> ngày
 						<%=date2 %> (<a href="<%=request.getContextPath()%>/MultiDate?date=<%=date2 %>&area=MN"><%=date_of_week2 %></a>)
 				</h2>
 				<div class="box-table box-table-mn">
-					<table border="0" cellpadding="0" cellspacing="0" class="bkqmiennam" width="100%">
+					<table border="0" cellpadding="0" cellspacing="0" class="bkqmiennam" width="100%" id="mn02">
 						<tbody>
 						  <tr>
 							<td width="100" class="giai"><table cellpadding="0" cellspacing="0" class="leftcl" width="100%">
@@ -290,14 +296,22 @@ for(Entry<String,List<Data>> entry:map3.entrySet()){
 						</tbody>
 					  </table>
 				</div>
+				<div class="mt-4 mb-4">
+					<button type="button" id="export-mn02" class="btn btn-warning pt-5 pb-5 pl-5 pr-5" style="background-color: orange; border-radius: 5px">Xuất vé dò</button>
+					<div style="height: 10px"></div>
+				</div>
+				<div class="mt-4 mb-4">
+					<button type="button" id="export-excel-mn02" class="btn btn-warning pt-5 pb-5 pl-5 pr-5" style="background-color: orange; border-radius: 5px">Xuất file Excel</button>
+					<div style="height: 10px"></div>
+				</div>
 			</div>
-			<div class="box-ketqua">
+			<div class="box-ketqua" id="box-ketqua-mn03">
 				<h2>
 					<a href="<%=request.getContextPath()%>/ByArea?area=MN">KQXS Miền Nam</a> ngày
 						<%=date2 %> (<a href="<%=request.getContextPath()%>/MultiDate?date=<%=date3 %>&area=MN"><%=date_of_week2 %></a>)
 				</h2>
 				<div class="box-table box-table-mn">
-					<table border="0" cellpadding="0" cellspacing="0" class="bkqmiennam" width="100%">
+					<table border="0" cellpadding="0" cellspacing="0" class="bkqmiennam" width="100%" id="mn03">
 						<tbody>
 						  <tr>
 							<td width="100" class="giai"><table cellpadding="0" cellspacing="0" class="leftcl" width="100%">
@@ -375,6 +389,14 @@ for(Entry<String,List<Data>> entry:map3.entrySet()){
 						  </tr>
 						</tbody>
 					  </table>
+				</div>
+				<div class="mt-4 mb-4">
+					<button type="button" id="export-mn03" class="btn btn-warning pt-5 pb-5 pl-5 pr-5" style="background-color: orange; border-radius: 5px">Xuất vé dò</button>
+					<div style="height: 10px"></div>
+				</div>
+				<div class="mt-4 mb-4">
+					<button type="button" id="export-excel-mn03" class="btn btn-warning pt-5 pb-5 pl-5 pr-5" style="background-color: orange; border-radius: 5px">Xuất file Excel</button>
+					<div style="height: 10px"></div>
 				</div>
 			</div>
 			
@@ -597,12 +619,84 @@ for(Entry<String,List<Data>> entry:map3.entrySet()){
 </body>
 <script>
 $.noConflict();
-	(function() {
-		var form = $('.form'), cache_width = form.width(), a4 = [ 595.28,
-				841.89 ]; // for a4 size paper width and height  
+(function() {
+	var form = $('#box-ketqua-mn01'), cache_width = form.width(), a4 = [ 595.28,
+			841.89 ]; // for a4 size paper width and height  
+			
+	$('#export-mn01').on('click', function() {
+		 $([document.documentElement, document.body]).animate({
+		        scrollTop: $("#box-ketqua-mn01").offset().top
+		    }, 100);
+		$('#box-ketqua-mn01').scrollTop(0);
+		createPDF();
+	});
+	//create pdf  
+	function createPDF() {
+		getCanvas().then(function(canvas) {
+			var img = canvas.toDataURL("image/png"), doc = new jsPDF({
+				unit : 'px',
+				format : 'a4'
+			});
+			doc.addImage(img, 'JPEG', 20, 20);
+			doc.save('ket-qua-so-xo-mn.pdf'); //Tên cái file lưu xuống
+			form.width(cache_width);
+		});
+	}
 
-		$('#create_pdf').on('click', function() {
-			$('body').scrollTop(0);
+	// create canvas object  
+	function getCanvas() {
+		form.width((a4[0] * 1.33333) - 80).css('max-width', 'none');
+		return html2canvas(form, {
+			imageTimeout : 2000,
+			removeContainer : true
+		});
+	}
+
+}());
+console.log( $("#box-ketqua-mn03").offset().top);
+(function() {
+	var form = $('#box-ketqua-mn02'), cache_width = form.width(), a4 = [ 595.28,
+			841.89 ]; // for a4 size paper width and height  
+			
+	$('#export-mn02').on('click', function() {
+		 $([document.documentElement, document.body]).animate({
+		        scrollTop: $("#box-ketqua-mn02").offset().top
+		    }, 100);
+		$('#box-ketqua-mn02').scrollTop(0);
+		createPDF();
+	});
+	//create pdf  
+	function createPDF() {
+		getCanvas().then(function(canvas) {
+			var img = canvas.toDataURL("image/png"), doc = new jsPDF({
+				unit : 'px',
+				format : 'a4'
+			});
+			doc.addImage(img, 'JPEG', 20, 20);
+			doc.save('ket-qua-xo-so-mn.pdf'); //Tên cái file lưu xuống
+			form.width(cache_width);
+		});
+	}
+
+	// create canvas object  
+	function getCanvas() {
+		form.width((a4[0] * 1.33333) - 80).css('max-width', 'none');
+		return html2canvas(form, {
+			imageTimeout : 2000,
+			removeContainer : true
+		});
+	}
+
+}());
+	(function() {
+		var form = $('#box-ketqua-mn03'), cache_width = form.width(), a4 = [ 595.28,
+				841.89 ]; // for a4 size paper width and height  
+				
+		$('#export-mn03').on('click', function() {
+			 $([document.documentElement, document.body]).animate({
+			        scrollTop: $("#box-ketqua-mn03").offset().top
+			    }, 100);
+			$('#box-ketqua-mn03').scrollTop(0);
 			createPDF();
 		});
 		//create pdf  
@@ -613,7 +707,7 @@ $.noConflict();
 					format : 'a4'
 				});
 				doc.addImage(img, 'JPEG', 20, 20);
-				doc.save('Bhavdip-html-to-pdf.pdf'); //Tên cái file lưu xuống
+				doc.save('ket-qua-xo-so-mn.pdf'); //Tên cái file lưu xuống
 				form.width(cache_width);
 			});
 		}
@@ -629,34 +723,139 @@ $.noConflict();
 
 	}());
 // Excel
-var data=JSON.parse('<%=General.convertToJsonFromMap(map1, date_of_week1,date1)%>');
-var workbook = XLSX.utils.book_new(),
-    worksheet = XLSX.utils.aoa_to_sheet(data);
-var merge = [{ s: {r:3, c:0}, e: {r:5, c:0} },
-	{ s: {r:7, c:0}, e: {r:13, c:0} },
-	{ s: {r:14, c:0}, e: {r:15, c:0} }
-];
-if(!worksheet['!merges']) worksheet['!merges'] = [];
-worksheet['!merges']=merge;
+$('#export-excel-mn01').on('click', function() {
+	var data=JSON.parse('<%=General.convertToJsonFromMap(map1, date_of_week1,date1)%>');
+	var workbook = XLSX.utils.book_new(),
+	    worksheet = XLSX.utils.aoa_to_sheet(data);
+	var merge = [{ s: {r:3, c:0}, e: {r:5, c:0} },
+		{ s: {r:7, c:0}, e: {r:13, c:0} },
+		{ s: {r:14, c:0}, e: {r:15, c:0} }
+	];
+	if(!worksheet['!merges']) worksheet['!merges'] = [];
+	worksheet['!merges']=merge;
+	var wscols = [
+	    {wch:30},
+	    {wch:12}
+	];
 
-worksheet["A4"].s = {
-		alignment: {
-			vertical: "center",
-		},
-	};
-worksheet["A8"].s = {
-		alignment: {
-			vertical: "center",
-		},
-	};
-worksheet["A15"].s = {
-		alignment: {
-			vertical: "center",
-		},
-	};
-workbook.SheetNames.push("First");
-workbook.Sheets["First"] = worksheet;
-XLSX.writeFile(workbook, "demo.xlsx");
+	worksheet['!cols'] = wscols;
+	worksheet["A4"].s = {
+			alignment: {
+				vertical: "center",
+			},
+		};
+	worksheet["A8"].s = {
+			alignment: {
+				vertical: "center",
+			},
+		};
+	worksheet["A15"].s = {
+			alignment: {
+				vertical: "center",
+			},
+		};
+	for (let i = 0; i < data[0].length-1; i++) {
+		
+		worksheet[XLSX.utils.encode_cell({ c: i+1, r: data.length-1 })].s = {
+				font: {
+					color:{ rgb: 'FF0000'},
+					bold: "true",
+				},
+			};
+		}
+	workbook.SheetNames.push("First");
+	workbook.Sheets["First"] = worksheet;
+	XLSX.writeFile(workbook, "MN_<%=date1%>.xlsx");
+});
+$('#export-excel-mn02').on('click', function() {
+	var data=JSON.parse('<%=General.convertToJsonFromMap(map2, date_of_week2,date2)%>');
+	var workbook = XLSX.utils.book_new(),
+	    worksheet = XLSX.utils.aoa_to_sheet(data);
+	var merge = [{ s: {r:3, c:0}, e: {r:5, c:0} },
+		{ s: {r:7, c:0}, e: {r:13, c:0} },
+		{ s: {r:14, c:0}, e: {r:15, c:0} }
+	];
+	if(!worksheet['!merges']) worksheet['!merges'] = [];
+	worksheet['!merges']=merge;
+	var wscols = [
+	    {wch:30},
+	    {wch:12}
+	];
+
+	worksheet['!cols'] = wscols;
+	worksheet["A4"].s = {
+			alignment: {
+				vertical: "center",
+			},
+		};
+	worksheet["A8"].s = {
+			alignment: {
+				vertical: "center",
+			},
+		};
+	worksheet["A15"].s = {
+			alignment: {
+				vertical: "center",
+			},
+		};
+	for (let i = 0; i < data[0].length-1; i++) {
+		
+		worksheet[XLSX.utils.encode_cell({ c: i+1, r: data.length-1 })].s = {
+				font: {
+					color:{ rgb: 'FF0000'},
+					bold: "true",
+				},
+			};
+		}
+	workbook.SheetNames.push("First");
+	workbook.Sheets["First"] = worksheet;
+	XLSX.writeFile(workbook, "MN_<%=date2%>.xlsx");
+});
+$('#export-excel-mn03').on('click', function() {
+	var data=JSON.parse('<%=General.convertToJsonFromMap(map3, date_of_week3,date3)%>');
+	var workbook = XLSX.utils.book_new(),
+	    worksheet = XLSX.utils.aoa_to_sheet(data);
+	var merge = [{ s: {r:3, c:0}, e: {r:5, c:0} },
+		{ s: {r:7, c:0}, e: {r:13, c:0} },
+		{ s: {r:14, c:0}, e: {r:15, c:0} }
+	];
+	if(!worksheet['!merges']) worksheet['!merges'] = [];
+	worksheet['!merges']=merge;
+	var wscols = [
+	    {wch:30},
+	    {wch:12}
+	];
+
+	worksheet['!cols'] = wscols;
+	worksheet["A4"].s = {
+			alignment: {
+				vertical: "center",
+			},
+		};
+	worksheet["A8"].s = {
+			alignment: {
+				vertical: "center",
+			},
+		};
+	worksheet["A15"].s = {
+			alignment: {
+				vertical: "center",
+			},
+		};
+	for (let i = 0; i < data[0].length-1; i++) {
+		
+		worksheet[XLSX.utils.encode_cell({ c: i+1, r: data.length-1 })].s = {
+				font: {
+					color:{ rgb: 'FF0000'},
+					bold: "true",
+				},
+			};
+		}
+	workbook.SheetNames.push("First");
+	workbook.Sheets["First"] = worksheet;
+	XLSX.writeFile(workbook, "MN_<%=date3%>.xlsx");
+});
+
 </script>
 
 </html>

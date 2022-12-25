@@ -1,5 +1,6 @@
 <%@page import="Model.Province"%>
 <%@page import="Service.Api"%>
+<%@page import="Service.General"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Map.Entry"%>
 <%@page import="Model.Data"%>
@@ -40,9 +41,6 @@ for(Data data:list3){
 }}
 %>
 <html lang="vi">
-<script src="https://code.jquery.com/jquery-1.12.4.min.js"
-	integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
-	crossorigin="anonymous"></script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
 <head>
@@ -74,6 +72,10 @@ for(Data data:list3){
 "url":"https://xskt.com.vn/"
 }
  </script>
+ <script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script> 
+ <script src="${pageContext.request.contextPath}/lib/dist/xlsx.bundle.js"></script>
+ <script src="https://code.jquery.com/jquery-3.3.1.js" type="text/javascript"></script>
 </head>
 <body>
 	<div id="header">
@@ -110,13 +112,13 @@ for(Data data:list3){
 			<div class="clear"></div>
 			<a id="mien-bac"></a>
 			<div class="clear"></div>
-			<div class="box-ketqua">
+			<div class="box-ketqua" id="box-ketqua-01">
 				<h2>
 					<a href="<%=request.getContextPath()%>/ByProvince?province=<%=province%>">KQXS <%=province %></a> ngày 
 						<%=date1%> (<a href="<%=request.getContextPath()%>/MultiDate?date=<%=date1 %>&area=MB"><%=date_of_week1 %></a>)
 				</h2>
 				<div class="box-table">
-					<table class="result" id="MB0">
+					<table class="result" >
 					<%if(list1!=null) {%>
 						<tr>
 							<th colspan="2"><b class=h3>
@@ -155,11 +157,19 @@ for(Data data:list3){
 					</table>
 
 				</div>
+				<div class="mt-4 mb-4" >
+					<button type="button" id="export-province01" class="btn btn-warning pt-5 pb-5 pl-5 pr-5" style="background-color: orange; border-radius: 5px">Xuất vé dò</button>
+					<div style="height: 10px"></div>
+				</div>
+				<div class="mt-4 mb-4" >
+					<button type="button" id="export-excel-province01" class="btn btn-warning pt-5 pb-5 pl-5 pr-5" style="background-color: orange; border-radius: 5px">Xuất file Excel</button>
+					<div style="height: 10px"></div>
+				</div>
 				<div class="clear"></div>
 			</div>
 			<div class="margin6" id="bnc2"></div>
 			<div class="clear"></div>
-			<div class="box-ketqua">
+			<div class="box-ketqua" id="box-ketqua-02">
 				<h2>
 					<a href="<%=request.getContextPath()%>/ByProvince?province=<%=province%>">KQXS <%=province %></a> ngày 
 						<%=date2%> (<a href="<%=request.getContextPath()%>/MultiDate?date=<%=date2 %>&area=MB"><%=date_of_week2 %></a>)
@@ -205,9 +215,17 @@ for(Data data:list3){
 					</table>
 
 				</div>
+				<div class="mt-4 mb-4" >
+					<button type="button" id="export-province02" class="btn btn-warning pt-5 pb-5 pl-5 pr-5" style="background-color: orange; border-radius: 5px">Xuất vé dò</button>
+					<div style="height: 10px"></div>
+				</div>
+				<div class="mt-4 mb-4">
+					<button type="button" id="export-excel-province02" class="btn btn-warning pt-5 pb-5 pl-5 pr-5" style="background-color: orange; border-radius: 5px">Xuất file Excel</button>
+					<div style="height: 10px"></div>
+				</div>
 				<div class="clear"></div>
 			</div>
-			<div class="box-ketqua">
+			<div class="box-ketqua" id="box-ketqua-03">
 				<h2>
 					<a href="<%=request.getContextPath()%>/ByProvince?province=<%=province%>">KQXS <%=province %></a> ngày 
 						<%=date3%>(<a href="<%=request.getContextPath()%>/MultiDate?date=<%=date3 %>&area=MB"><%=date_of_week3 %></a>)
@@ -251,6 +269,14 @@ for(Data data:list3){
 						
 					</table>
 
+				</div>
+				<div class="mt-4 mb-4" >
+					<button type="button" id="export-province03" class="btn btn-warning pt-5 pb-5 pl-5 pr-5" style="background-color: orange; border-radius: 5px">Xuất vé dò</button>
+					<div style="height: 10px"></div>
+				</div>
+				<div class="mt-4 mb-4" >
+					<button type="button" id="export-excel-province03" class="btn btn-warning pt-5 pb-5 pl-5 pr-5" style="background-color: orange; border-radius: 5px">Xuất file Excel</button>
+					<div style="height: 10px"></div>
 				</div>
 				<div class="clear"></div>
 			</div>
@@ -474,12 +500,85 @@ for(Data data:list3){
 
 </body>
 <script>
-	(function() {
-		var form = $('.form'), cache_width = form.width(), a4 = [ 595.28,
-				841.89 ]; // for a4 size paper width and height  
+$.noConflict();
+(function() {
+	var form = $('#box-ketqua-01'), cache_width = form.width(), a4 = [ 595.28,
+			841.89 ]; // for a4 size paper width and height  
+			
+	$('#export-province01').on('click', function() {
+		 $([document.documentElement, document.body]).animate({
+		        scrollTop: $("#box-ketqua-01").offset().top
+		    }, 100);
+		$('#box-ketqua-01').scrollTop(0);
+		createPDF();
+	});
+	//create pdf  
+	function createPDF() {
+		getCanvas().then(function(canvas) {
+			var img = canvas.toDataURL("image/png"), doc = new jsPDF({
+				unit : 'px',
+				format : 'a4'
+			});
+			doc.addImage(img, 'JPEG', 20, 20);
+			doc.save('ket-qu-so-xo.pdf'); //Tên cái file lưu xuống
+			form.width(cache_width);
+		});
+	}
 
-		$('#create_pdf').on('click', function() {
-			$('body').scrollTop(0);
+	// create canvas object  
+	function getCanvas() {
+		form.width((a4[0] * 1.33333) - 80).css('max-width', 'none');
+		return html2canvas(form, {
+			imageTimeout : 2000,
+			removeContainer : true
+		});
+	}
+
+}());
+(function() {
+	var form = $('#box-ketqua-02'), cache_width = form.width(), a4 = [ 595.28,
+			841.89 ]; // for a4 size paper width and height  
+			
+	$('#export-province02').on('click', function() {
+		 $([document.documentElement, document.body]).animate({
+		        scrollTop: $("#box-ketqua-02").offset().top
+		    }, 100);
+		$('#box-ketqua-02').scrollTop(0);
+		createPDF();
+	});
+	//create pdf  
+	function createPDF() {
+		getCanvas().then(function(canvas) {
+			var img = canvas.toDataURL("image/png"), doc = new jsPDF({
+				unit : 'px',
+				format : 'a4'
+			});
+			doc.addImage(img, 'JPEG', 20, 20);
+			doc.save('ket-qua-xo-so.pdf'); //Tên cái file lưu xuống
+			form.width(cache_width);
+		});
+	}
+
+	// create canvas object  
+	function getCanvas() {
+		form.width((a4[0] * 1.33333) - 80).css('max-width', 'none');
+		return html2canvas(form, {
+			imageTimeout : 2000,
+			removeContainer : true
+		});
+	}
+
+}());
+	(function() {
+		var form = $('#box-ketqua-03'), cache_width = form.width(), a4 = [ 595.28,
+				841.89 ]; // for a4 size paper width and height  
+				
+		$('#export-province03').on('click', function() {
+			
+			 $([document.documentElement, document.body]).animate({
+			        scrollTop: $("#box-ketqua-03").offset().top
+			    }, 100);
+			$('#box-ketqua-03').scrollTop(0);
 			createPDF();
 		});
 		//create pdf  
@@ -490,7 +589,7 @@ for(Data data:list3){
 					format : 'a4'
 				});
 				doc.addImage(img, 'JPEG', 20, 20);
-				doc.save('Bhavdip-html-to-pdf.pdf'); //Tên cái file lưu xuống
+				doc.save('ket-qua-xo-so.pdf'); //Tên cái file lưu xuống
 				form.width(cache_width);
 			});
 		}
@@ -505,6 +604,139 @@ for(Data data:list3){
 		}
 
 	}());
+	// Excel
+	$('#export-excel-province01').on('click', function() {
+		var data=JSON.parse('<%=General.convertToJsonFromMapProvince(list1, date_of_week1, date1, province)%>');
+		var workbook = XLSX.utils.book_new(),
+		    worksheet = XLSX.utils.aoa_to_sheet(data);
+		var merge = [{ s: {r:3, c:0}, e: {r:5, c:0} },
+			{ s: {r:7, c:0}, e: {r:13, c:0} },
+			{ s: {r:14, c:0}, e: {r:15, c:0} }
+		];
+		if(!worksheet['!merges']) worksheet['!merges'] = [];
+		worksheet['!merges']=merge;
+		var wscols = [
+		    {wch:30},
+		    {wch:12}
+		];
+
+		worksheet['!cols'] = wscols;
+		worksheet["A4"].s = {
+				alignment: {
+					vertical: "center",
+				},
+			};
+		worksheet["A8"].s = {
+				alignment: {
+					vertical: "center",
+				},
+			};
+		worksheet["A15"].s = {
+				alignment: {
+					vertical: "center",
+				},
+			};
+		for (let i = 0; i < data[0].length-1; i++) {
+			
+			worksheet[XLSX.utils.encode_cell({ c: i+1, r: data.length-1 })].s = {
+					font: {
+						color:{ rgb: 'FF0000'},
+						bold: "true",
+					},
+				};
+			}
+		workbook.SheetNames.push("First");
+		workbook.Sheets["First"] = worksheet;
+		XLSX.writeFile(workbook, "<%=province%>_<%=date1%>.xlsx");
+	});
+	$('#export-excel-province02').on('click', function() {
+		var data=JSON.parse('<%=General.convertToJsonFromMapProvince(list2, date_of_week2, date2, province)%>');
+		var workbook = XLSX.utils.book_new(),
+		    worksheet = XLSX.utils.aoa_to_sheet(data);
+		var merge = [{ s: {r:3, c:0}, e: {r:5, c:0} },
+			{ s: {r:7, c:0}, e: {r:13, c:0} },
+			{ s: {r:14, c:0}, e: {r:15, c:0} }
+		];
+		if(!worksheet['!merges']) worksheet['!merges'] = [];
+		worksheet['!merges']=merge;
+		var wscols = [
+		    {wch:30},
+		    {wch:12}
+		];
+
+		worksheet['!cols'] = wscols;
+		worksheet["A4"].s = {
+				alignment: {
+					vertical: "center",
+				},
+			};
+		worksheet["A8"].s = {
+				alignment: {
+					vertical: "center",
+				},
+			};
+		worksheet["A15"].s = {
+				alignment: {
+					vertical: "center",
+				},
+			};
+		for (let i = 0; i < data[0].length-1; i++) {
+			
+			worksheet[XLSX.utils.encode_cell({ c: i+1, r: data.length-1 })].s = {
+					font: {
+						color:{ rgb: 'FF0000'},
+						bold: "true",
+					},
+				};
+			}
+		workbook.SheetNames.push("First");
+		workbook.Sheets["First"] = worksheet;
+		XLSX.writeFile(workbook, "<%=province%>_<%=date2%>.xlsx");
+	});
+	$('#export-excel-province03').on('click', function() {
+		var data=JSON.parse('<%=General.convertToJsonFromMapProvince(list3, date_of_week3, date3, province)%>');
+		var workbook = XLSX.utils.book_new(),
+		    worksheet = XLSX.utils.aoa_to_sheet(data);
+		var merge = [{ s: {r:3, c:0}, e: {r:5, c:0} },
+			{ s: {r:7, c:0}, e: {r:13, c:0} },
+			{ s: {r:14, c:0}, e: {r:15, c:0} }
+		];
+		if(!worksheet['!merges']) worksheet['!merges'] = [];
+		worksheet['!merges']=merge;
+		var wscols = [
+		    {wch:30},
+		    {wch:12}
+		];
+
+		worksheet['!cols'] = wscols;
+		worksheet["A4"].s = {
+				alignment: {
+					vertical: "center",
+				},
+			};
+		worksheet["A8"].s = {
+				alignment: {
+					vertical: "center",
+				},
+			};
+		worksheet["A15"].s = {
+				alignment: {
+					vertical: "center",
+				},
+			};
+		for (let i = 0; i < data[0].length-1; i++) {
+			
+			worksheet[XLSX.utils.encode_cell({ c: i+1, r: data.length-1 })].s = {
+					font: {
+						color:{ rgb: 'FF0000'},
+						bold: "true",
+					},
+				};
+			}
+		workbook.SheetNames.push("First");
+		workbook.Sheets["First"] = worksheet;
+		XLSX.writeFile(workbook,"<%=province%>_<%=date3%>.xlsx");
+	});
 </script>
 
 </html>

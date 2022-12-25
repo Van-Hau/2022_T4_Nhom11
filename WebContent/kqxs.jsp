@@ -1,5 +1,6 @@
 <%@page import="Model.Province"%>
 <%@page import="Service.Api"%>
+<%@page import="Service.General"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Map.Entry"%>
 <%@page import="Model.Data"%>
@@ -25,9 +26,6 @@ for(Entry<String,List<Data>> entry:mapMB.entrySet()){
 }}
 %>
 <html lang="vi">
-<script src="https://code.jquery.com/jquery-1.12.4.min.js"
-	integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
-	crossorigin="anonymous"></script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
 <head>
@@ -59,6 +57,8 @@ for(Entry<String,List<Data>> entry:mapMB.entrySet()){
 "url":"https://xskt.com.vn/"
 }
  </script>
+ <script src="${pageContext.request.contextPath}/lib/dist/xlsx.bundle.js"></script>
+ <script src="https://code.jquery.com/jquery-3.3.1.js" type="text/javascript"></script>
 </head>
 <body>
 	<div id="header">
@@ -167,8 +167,12 @@ for(Entry<String,List<Data>> entry:mapMB.entrySet()){
 					</table>
 
 				</div>
-				<div class="mt-4 mb-4" id="export-mb">
-					<button type="button" class="btn btn-warning pt-5 pb-5 pl-5 pr-5" style="background-color: orange; border-radius: 5px">Xuất vé dò</button>
+				<div class="mt-4 mb-4">
+					<button type="button" id="export-mb" class="btn btn-warning pt-5 pb-5 pl-5 pr-5" style="background-color: orange; border-radius: 5px">Xuất vé dò</button>
+					<div style="height: 10px"></div>
+				</div>
+				<div class="mt-4 mb-4">
+					<button type="button" id="export-excel-mb" class="btn btn-warning pt-5 pb-5 pl-5 pr-5" style="background-color: orange; border-radius: 5px">Xuất file Excel</button>
 					<div style="height: 10px"></div>
 				</div>
 				<div class="clear"></div>
@@ -280,8 +284,12 @@ for(Entry<String,List<Data>> entry:mapMB.entrySet()){
 						</tbody>
 					</table>
 				</div>
-				<div class="mt-4 mb-4" id="export-mt">
-					<button type="button" class="btn btn-warning pt-5 pb-5 pl-5 pr-5" style="background-color: orange; border-radius: 5px">Xuất vé dò</button>
+				<div class="mt-4 mb-4">
+					<button type="button" id="export-mt" class="btn btn-warning pt-5 pb-5 pl-5 pr-5" style="background-color: orange; border-radius: 5px">Xuất vé dò</button>
+					<div style="height: 10px"></div>
+				</div>
+				<div class="mt-4 mb-4">
+					<button type="button" id="export-excel-mt" class="btn btn-warning pt-5 pb-5 pl-5 pr-5" style="background-color: orange; border-radius: 5px">Xuất file Excel</button>
 					<div style="height: 10px"></div>
 				</div>
 			</div>
@@ -390,8 +398,12 @@ for(Entry<String,List<Data>> entry:mapMB.entrySet()){
 						</tbody>
 					</table>
 				</div>
-				<div class="mt-4 mb-4" id="export-mn">
-					<button type="button" class="btn btn-warning pt-5 pb-5 pl-5 pr-5" style="background-color: orange; border-radius: 5px">Xuất vé dò</button>
+				<div class="mt-4 mb-4">
+					<button type="button" id="export-mn" class="btn btn-warning pt-5 pb-5 pl-5 pr-5" style="background-color: orange; border-radius: 5px">Xuất vé dò</button>
+					<div style="height: 10px"></div>
+				</div>
+				<div class="mt-4 mb-4">
+					<button type="button" id="export-excel-mn" class="btn btn-warning pt-5 pb-5 pl-5 pr-5" style="background-color: orange; border-radius: 5px">Xuất file Excel</button>
 					<div style="height: 10px"></div>
 				</div>
 			</div>
@@ -615,6 +627,7 @@ for(Entry<String,List<Data>> entry:mapMB.entrySet()){
 </body>
 
 <script>
+$.noConflict();
 (function() {
 	var form = $('#box-ketqua-mb'), cache_width = form.width(), a4 = [ 595.28,
 			841.89 ]; // for a4 size paper width and height  
@@ -717,5 +730,138 @@ for(Entry<String,List<Data>> entry:mapMB.entrySet()){
 		}
 
 	}());
+	// Excel
+	$('#export-excel-mb').on('click', function() {
+		var data=JSON.parse('<%=General.convertToJsonFromMap(mapMB, date_of_week,date)%>');
+		var workbook = XLSX.utils.book_new(),
+		    worksheet = XLSX.utils.aoa_to_sheet(data);
+		var merge = [{ s: {r:3, c:0}, e: {r:5, c:0} },
+			{ s: {r:7, c:0}, e: {r:13, c:0} },
+			{ s: {r:14, c:0}, e: {r:15, c:0} }
+		];
+		if(!worksheet['!merges']) worksheet['!merges'] = [];
+		worksheet['!merges']=merge;
+		var wscols = [
+		    {wch:30},
+		    {wch:12}
+		];
+
+		worksheet['!cols'] = wscols;
+		worksheet["A4"].s = {
+				alignment: {
+					vertical: "center",
+				},
+			};
+		worksheet["A8"].s = {
+				alignment: {
+					vertical: "center",
+				},
+			};
+		worksheet["A15"].s = {
+				alignment: {
+					vertical: "center",
+				},
+			};
+		for (let i = 0; i < data[0].length-1; i++) {
+			
+			worksheet[XLSX.utils.encode_cell({ c: i+1, r: data.length-1 })].s = {
+					font: {
+						color:{ rgb: 'FF0000'},
+						bold: "true",
+					},
+				};
+			}
+		workbook.SheetNames.push("First");
+		workbook.Sheets["First"] = worksheet;
+		XLSX.writeFile(workbook, "MB_<%=date%>.xlsx");
+	});
+	$('#export-excel-mt').on('click', function() {
+		var data=JSON.parse('<%=General.convertToJsonFromMap(mapMT, date_of_week,date)%>');
+		var workbook = XLSX.utils.book_new(),
+		    worksheet = XLSX.utils.aoa_to_sheet(data);
+		var merge = [{ s: {r:3, c:0}, e: {r:5, c:0} },
+			{ s: {r:7, c:0}, e: {r:13, c:0} },
+			{ s: {r:14, c:0}, e: {r:15, c:0} }
+		];
+		if(!worksheet['!merges']) worksheet['!merges'] = [];
+		worksheet['!merges']=merge;
+		var wscols = [
+		    {wch:30},
+		    {wch:12}
+		];
+
+		worksheet['!cols'] = wscols;
+		worksheet["A4"].s = {
+				alignment: {
+					vertical: "center",
+				},
+			};
+		worksheet["A8"].s = {
+				alignment: {
+					vertical: "center",
+				},
+			};
+		worksheet["A15"].s = {
+				alignment: {
+					vertical: "center",
+				},
+			};
+		for (let i = 0; i < data[0].length-1; i++) {
+			
+			worksheet[XLSX.utils.encode_cell({ c: i+1, r: data.length-1 })].s = {
+					font: {
+						color:{ rgb: 'FF0000'},
+						bold: "true",
+					},
+				};
+			}
+		workbook.SheetNames.push("First");
+		workbook.Sheets["First"] = worksheet;
+		XLSX.writeFile(workbook, "MT_<%=date%>.xlsx");
+	});
+	$('#export-excel-mn').on('click', function() {
+		var data=JSON.parse('<%=General.convertToJsonFromMap(mapMN, date_of_week,date)%>');
+		var workbook = XLSX.utils.book_new(),
+		    worksheet = XLSX.utils.aoa_to_sheet(data);
+		var merge = [{ s: {r:3, c:0}, e: {r:5, c:0} },
+			{ s: {r:7, c:0}, e: {r:13, c:0} },
+			{ s: {r:14, c:0}, e: {r:15, c:0} }
+		];
+		if(!worksheet['!merges']) worksheet['!merges'] = [];
+		worksheet['!merges']=merge;
+		var wscols = [
+		    {wch:30},
+		    {wch:12}
+		];
+
+		worksheet['!cols'] = wscols;
+		worksheet["A4"].s = {
+				alignment: {
+					vertical: "center",
+				},
+			};
+		worksheet["A8"].s = {
+				alignment: {
+					vertical: "center",
+				},
+			};
+		worksheet["A15"].s = {
+				alignment: {
+					vertical: "center",
+				},
+			};
+		for (let i = 0; i < data[0].length-1; i++) {
+			
+			worksheet[XLSX.utils.encode_cell({ c: i+1, r: data.length-1 })].s = {
+					font: {
+						color:{ rgb: 'FF0000'},
+						bold: "true",
+					},
+				};
+			}
+		workbook.SheetNames.push("First");
+		workbook.Sheets["First"] = worksheet;
+		XLSX.writeFile(workbook, "MN_<%=date%>.xlsx");
+	});
 </script>
 </html>

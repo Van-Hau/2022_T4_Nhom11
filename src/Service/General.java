@@ -11,6 +11,25 @@ import com.google.gson.JsonObject;
 
 import Model.Data;
 public class General {
+	public static String convertToJsonFromMapProvince(List<Data> list,String dateOfWeek,String date,String province) {
+		List<String[]> result=new ArrayList<String[]>();
+		String[] header=new String[2];
+		header[0]="Ngày "+date+"("+dateOfWeek+")";
+		header[1]=province;
+		result.add(header);
+		String award="";
+		for(Data d:list) {	
+			String row="";
+			if(award!=d.getName_award_Fact()) row+=d.getName_award_Fact();
+			else row+="";
+			row+="-"+d.getNumberResultReal();
+			result.add(row.split("-"));
+		}
+		String[][] a=result.toArray(new String[0][0]);
+		Gson gson=new Gson();
+		return gson.toJson(a);	
+		
+	}
 public static String convertToJsonFromMap(Map<String,List<Data>> map,String dateOfWeek,String date) {
 	List<String> provinces=new ArrayList<String>(map.keySet());
 	
